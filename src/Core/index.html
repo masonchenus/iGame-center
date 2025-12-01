@@ -33,12 +33,6 @@
             transition: all 0.5s ease-in-out;
             transform: scale(2);
         }
-
-        .btn-game-action:hover {
-            /* Does the same thing as lines 25-29 */
-            transform: scale(1.1);
-            box-shadow: 0 4px 15 px rgba(0, 0, 0, 1)
-        }
     </style>
     <style>
         /* Epilepsy mode animation uses the above colors. Applied when body has .epilepsy-mode */
@@ -168,7 +162,7 @@
 
         .gameView {
             display: none;
-            background: radial-grdadient(1200px 800px at 70% 30%, #0c1326 0%, #0a0f1d 45%, #090e19 100%);
+            background: radial-gradient(1200px 800px at 70% 30%, #0c1326 0%, #0a0f1d 45%, #090e19 100%);
         }
 
         .gameView.active {
@@ -4437,7 +4431,7 @@
             </div>
         </div>
     </div>
-    <div class="gameView" id="frozequestView"><button class="backToHome">← Back</button>
+    <div class="gameView" id="frozenquestView"><button class="backToHome">← Back</button>
         <div class="wrap">
             <div class="passwordCard">
                 <h2>❄️ Frozen Quest</h2><canvas width="500" height="400" style="border:2px solid #667eea"></canvas>
@@ -8114,10 +8108,7 @@
         // Snake screen cut effect
         let screenIsCut = false;
 
-        function createSnakeCut(count) {
-            for (let ScreenCutIndex = 0; ScreenCutIndex < count; ScreenCutIndex++) {
-                createSnakeCut(15);
-            }
+        function createSnakeCut() {
             if (screenIsCut) return; // Already cut
 
             // Create snake element
@@ -11295,7 +11286,6 @@
             initMegaGame(10);
         });
 
-        const boss = new Boss(100, 50, 1000, 10);
         // ========== PAC-MAN ==========
         function initPacMan() {
             const canvas = document.getElementById('pacmanCanvas');
@@ -13066,7 +13056,7 @@
         // ========== BOUNCE MANIA ==========
         function initBounceMania() {
             const game = initSimpleGame('bouncemania');
-            const canvas = document.getElementById('bouncermaniaCanvas');
+            const canvas = document.getElementById('bouncemaniaCanvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
 
