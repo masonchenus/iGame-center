@@ -10689,18 +10689,7 @@
                                 pierceCount: 100
                             });
                         } else if (currentWeapon === 'chaos') {
-                            bullets.push({
-                                x: player.x + player.width / 2,
-                                y: player.y,
-                                width: currentWep.bulletSize.w,
-                                height: currentWep.bulletSize.h,
-                                vx: 0,
-                                vy: -currentWep.bulletSpeed,
-                                damage: currentWep.damage * damageMultiplier,
-                                type: 'chaos',
-                                piercing: true,
-                                pierceCount: 100
-                            });
+                            currentWep.effect();
                         }
 
                         // ---- CHAOS POWERUP ----
