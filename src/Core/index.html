@@ -3689,9 +3689,6 @@
                     <button id="weaponSupernova"
                         style="padding:8px 16px;background:var(--btn);color:var(--ink);border:2px solid #ffaa00;border-radius:6px;cursor:pointer;font-weight:bold">4️⃣
                         SUPERNOVA</button>
-                    <button id="weaponChaos"
-                        style="padding:8px 16px;background:var(--btn);color:var(--ink);border:2px solid #ff00ff;border-radius:6px;cursor:pointer;font-weight:bold">5️⃣
-                        CHAOS</button>
                 </div>
                 <div style="margin-top:15px;font-size:12px;color:var(--muted)">Current: <span id="currentWeapon"
                         style="color:var(--accent);font-weight:bold">NORMAL</span></div>
@@ -5605,7 +5602,7 @@
             let lives = 3;
             let gameRunning = true;
             let boss = null;
-            let weaponMode = 'normal'; // 'normal', 'spread', 'laser', 'supernova', 'chaos'
+            let weaponMode = 'normal'; // 'normal', 'spread', 'laser', 'supernova'
             let spreadRays = 5; // Number of rays for spreadshot (2-20)
             let laserWidth = 50; // Laser width in pixels (1-200)
             let weaponCooldown = 0;
@@ -5666,35 +5663,6 @@
                             supernovaDuration = 30;
                             supernovaRadius = 500;
                             weaponCooldown = 200;
-                        } else if (weaponMode === 'chaos') {
-                            // Chaos: burst of 200 random bullets in all directions with random properties
-                            for (let chaosIdx = 0; chaosIdx < 200; chaosIdx++) {
-                                const chaosRandomAngle = Math.random() * Math.PI * 2;
-                                const chaosRandomSpeed = Math.random() * 8 + 2;
-                                const chaosRandomDamage = Math.floor(Math.random() * 40) + 10;
-                                const chaosRandomOffsetX = Math.random() * 40 - 20;
-                                const chaosRandomOffsetY = Math.random() * 40 - 20;
-                                const chaosRandomDeviation = Math.random() * Math.PI / 4 - Math.PI / 8;
-                                const chaosRandomBounce = Math.random() > 0.5;
-                                const chaosRandomPiercing = Math.random() > 0.7;
-                                const chaosRandomTracking = Math.random() > 0.85;
-                                const chaosRandomSpin = Math.random() > 0.6;
-                                const chaosRandomHoming = Math.random() > 0.75;
-                                bullets.push({
-                                    x: ship.x + Math.cos(ship.angle) * ship.r + chaosRandomOffsetX,
-                                    y: ship.y + Math.sin(ship.angle) * ship.r + chaosRandomOffsetY,
-                                    vx: Math.cos(chaosRandomAngle + chaosRandomDeviation) * chaosRandomSpeed,
-                                    vy: Math.sin(chaosRandomAngle + chaosRandomDeviation) * chaosRandomSpeed,
-                                    damage: chaosRandomDamage,
-                                    type: 'chaos',
-                                    bouncing: chaosRandomBounce,
-                                    piercing: chaosRandomPiercing,
-                                    tracking: chaosRandomTracking,
-                                    spin: chaosRandomSpin,
-                                    homing: chaosRandomHoming
-                                });
-                            }
-                            weaponCooldown = 20;
                         } else {
                             // Normal: single bullet (25 damage)
                             bullets.push({
@@ -5713,8 +5681,6 @@
                 if (e.key === '2') weaponMode = 'spread';
                 if (e.key === '3') weaponMode = 'laser';
                 if (e.key === '4') weaponMode = 'supernova';
-                if (e.key === '5') weaponMode = 'chaos';
-                if (e.key === '9') weaponMode = 'chaos';
             });
 
             // Weapon button handlers
@@ -5724,7 +5690,6 @@
                 document.getElementById('weaponSpread').style.opacity = weaponMode === 'spread' ? '1' : '0.5';
                 document.getElementById('weaponLaser').style.opacity = weaponMode === 'laser' ? '1' : '0.5';
                 document.getElementById('weaponSupernova').style.opacity = weaponMode === 'supernova' ? '1' : '0.5';
-                document.getElementById('weaponChaos').style.opacity = weaponMode === 'chaos' ? '1' : '0.5';
                 // Show rays control only when spreadshot is selected
                 document.getElementById('spreadsheetRaysControl').style.display = weaponMode === 'spread' ? 'block' : 'none';
                 // Show laser width control only when laser is selected
@@ -5747,8 +5712,8 @@
                 weaponMode = 'supernova';
                 updateWeaponDisplay();
             });
-            document.getElementById('weaponChaos').addEventListener('click', () => {
-                weaponMode = 'chaos';
+            document.getElementById('weaponLaser').addEventListener('click', () => {
+                weaponMode = 'laser';
                 updateWeaponDisplay();
             });
 
@@ -10102,7 +10067,7 @@
                 nova: {
                     name: 'Nova',
                     color: '#fb7185',
-                    fireRate: 100,
+                    fireRate: 10000,
                     damage: 200,
                     bulletSpeed: 8,
                     bulletSize: { w: 10, h: 10 },
@@ -10124,13 +10089,18 @@
                 },
                 chaos: {
                     name: 'Chaos',
-                    color: '#ff00ff',
-                    fireRate: 50,
-                    damage: 15,
-                    bulletSpeed: 10,
-                    bulletSize: { w: 4, h: 4 },
-                    spread: 0,
-                    description: 'Chaotic barrage',
+                    icon: '🌪️',
+                    color: () => {
+                        const colors = ['#ff00ff', '#00ff00', '#ffff00', '#ff0000', '#00ffff', '#ff6600', '#00ff99', '#ff1493', '#00ced1', '#32cd32', '#ff4500', '#1e90ff', '#ffd700', '#ff69b4', '#00bfff'];
+                        return colors[Math.floor(Math.random() * colors.length)];
+                    },
+                    fireRate: () => Math.floor(Math.random() * 200) + 30,
+                    damage: () => Math.floor(Math.random() * 150) + 20,
+                    bulletSpeed: () => Math.random() * 25 + 5,
+                    bulletSize: () => ({ w: Math.random() * 12 + 2, h: Math.random() * 12 + 2 }),
+                    spread: () => Math.floor(Math.random() * 360),
+                    rayCount: () => Math.floor(Math.random() * 450) + 50,
+                    description: 'Chaos',
                     chaosMode: true,
                     bulletCount: 500,
                     randomBounce: true,
@@ -10152,7 +10122,183 @@
                     randomMagnetism: true,
                     randomRotation: true,
                     randomTrail: true,
-                    randomGlitch: true
+                    randomGlitch: true,
+                    randomShockWave: true,
+                    randomPulse: true,
+                    randomMerge: true,
+                    randomFractal: true,
+                    randomStatic: true,
+                    randomScale: true,
+                    randomShift: true,
+                    randomWarp: true,
+                    randomPhase: true,
+                    randomAmplitude: true,
+                    randomFrequency: true,
+                    randomDecay: true,
+                    randomBounceCount: true,
+                    randomLifespan: true,
+                    randomGlitchAmount: true,
+                    randomMagnetStrength: true,
+                    randomStaticIntensity: true,
+                    randomPulseFreq: true,
+                    randomSpinSpeed: true,
+                    randomRotationSpeed: true,
+                    randomExplosionRadius: true,
+                    randomPierceCount: true,
+                    randomTrailLength: true,
+                    randomJitterAmount: true,
+                    randomDriftAmount: true,
+                    randomWavePhase: true,
+                    randomWaveAmplitude: true,
+                    randomWaveFrequency: true,
+                    randomWaveDecay: true,
+                    randomOffsetX: () => Math.random() * 100 - 50,
+                    randomOffsetY: () => Math.random() * 60 - 30,
+                    effect: () => {
+                        for (let i = 0; i < 500; i++) {
+                            const angle = Math.random() * Math.PI * 2;
+                            const speed = Math.random() * 30 + 5;
+                            const damage = Math.floor(Math.random() * 200) + 10;
+                            const size = Math.random() * 15 + 1;
+                            const bounceEnabled = Math.random() > 0.3;
+                            const pierceEnabled = Math.random() > 0.6;
+                            const explosiveEnabled = Math.random() > 0.75;
+                            const trackingEnabled = Math.random() > 0.8;
+                            const spinEnabled = Math.random() > 0.5;
+                            const offsetX = Math.random() * 80 - 40;
+                            const offsetY = Math.random() * 50 - 25;
+                            const alpha = Math.random() * 0.8 + 0.2;
+                            const velocityMult = Math.random() * 2 + 0.3;
+                            const colors = ['#ff00ff', '#00ff00', '#ffff00', '#ff0000', '#00ffff', '#ff6600', '#00ff99', '#ff1493', '#00ced1', '#32cd32', '#ff4500', '#1e90ff', '#ffd700', '#ff69b4', '#00bfff', '#7fff00', '#adff2f', '#ff7f50', '#dc143c', '#00008b'];
+                            const bulletColor = colors[Math.floor(Math.random() * colors.length)];
+                            const bounceCount = Math.floor(Math.random() * 15) + 1;
+                            const rotationAmount = Math.random() * 360;
+                            const trailLength = Math.floor(Math.random() * 20) + 3;
+                            const glitchProb = Math.random() > 0.65;
+                            const shockwaveProb = Math.random() > 0.75;
+                            const pulseProb = Math.random() > 0.7;
+                            const waveMotion = Math.random() > 0.6;
+                            const wavePhase = Math.random() * Math.PI * 2;
+                            const waveAmplitude = Math.random() * 15 + 2;
+                            const waveFrequency = Math.random() * 0.15 + 0.01;
+                            const waveDecay = Math.random() * 0.08 + 0.01;
+                            const magnetism = Math.random() > 0.75;
+                            const magnetStrength = Math.random() * 3 + 0.5;
+                            const jitterAmount = Math.random() * 8;
+                            const glitchAmount = Math.random() * 5 + 1;
+                            const driftAmount = Math.random() * 4;
+                            const lifespan = Math.random() * 8000 + 2000;
+                            const pierceCount = Math.floor(Math.random() * 100) + 5;
+                            const explosionRadius = Math.random() * 150 + 30;
+                            const spinSpeed = Math.random() * 0.5;
+                            const staticEffect = Math.random() > 0.8;
+                            const staticIntensity = Math.random() * 8 + 1;
+                            const scale = Math.random() * 2.5 + 0.2;
+                            const deviation = Math.random() * Math.PI / 3 - Math.PI / 6;
+
+                            const chaosBullet = {
+                                x: player.x + player.width / 2 + offsetX,
+                                y: player.y + offsetY,
+                                width: size,
+                                height: size,
+                                vx: Math.cos(angle + deviation) * speed * velocityMult,
+                                vy: Math.sin(angle + deviation) * speed * velocityMult,
+                                damage: damage * (activePowerups.damageBoost && now < activePowerups.damageBoost ? 2 : 1),
+                                type: 'chaos',
+                                bouncing: bounceEnabled,
+                                bounceCount: 0,
+                                maxBounces: bounceCount,
+                                piercing: pierceEnabled,
+                                pierceCount: pierceCount,
+                                tracking: trackingEnabled,
+                                targetEnemy: enemies[Math.floor(Math.random() * enemies.length)] || null,
+                                explosive: explosiveEnabled,
+                                explosionRadius: explosionRadius,
+                                spin: spinEnabled,
+                                spinSpeed: spinSpeed,
+                                alpha: alpha,
+                                color: bulletColor,
+                                trail: trailLength,
+                                trailPositions: [],
+                                glitch: glitchProb,
+                                glitchAmount: glitchAmount,
+                                shockWave: shockwaveProb,
+                                pulse: pulseProb,
+                                pulseFreq: Math.random() * 0.15 + 0.05,
+                                wave: waveMotion,
+                                wavePhase: wavePhase,
+                                waveAmplitude: waveAmplitude,
+                                waveFrequency: waveFrequency,
+                                waveDecay: waveDecay,
+                                magnetism: magnetism,
+                                magnetStrength: magnetStrength,
+                                staticEffect: staticEffect,
+                                staticIntensity: staticIntensity,
+                                scale: scale,
+                                rotation: rotationAmount,
+                                rotationSpeed: Math.random() * 15 - 7.5,
+                                offset: Math.random() * 360,
+                                jitter: jitterAmount,
+                                twist: Math.random() * 0.15,
+                                bend: Math.random() * 0.3,
+                                shift: Math.random() * 180,
+                                warp: Math.random() * 0.2,
+                                drift: driftAmount,
+                                birthTime: now,
+                                lifespan: lifespan,
+                                fractal: Math.random() > 0.85,
+                                merge: Math.random() > 0.8,
+                                velocityNoise: Math.random() * 0.5,
+                                colorShift: Math.random() * 60 - 30,
+                                wobble: Math.random() * 0.1,
+                                wobbleSpeed: Math.random() * 0.2 + 0.05,
+                                wobbleAmount: Math.random() * 3 + 1,
+                                charge: Math.random() * 100,
+                                chargeRate: Math.random() * 5 + 1,
+                                split: Math.random() > 0.9,
+                                splitCount: Math.floor(Math.random() * 5) + 1,
+                                reflect: Math.random() > 0.85,
+                                reflectCount: 0,
+                                maxReflects: Math.floor(Math.random() * 5) + 1,
+                                aura: Math.random() > 0.8,
+                                auraRadius: Math.random() * 20 + 5,
+                                auraPulse: Math.random() * 0.2 + 0.1,
+                                trail3D: Math.random() > 0.85,
+                                depth: Math.random() * 50 - 25,
+                                depthSpeed: Math.random() * 2 - 1,
+                                quantum: Math.random() > 0.9,
+                                quantumDrift: Math.random() * 30,
+                                energyField: Math.random() > 0.85,
+                                fieldStrength: Math.random() * 5 + 1,
+                                timeline: now + Math.random() * 10000,
+                                corruption: Math.random() * 0.5,
+                                corruptionRate: Math.random() * 0.02,
+                                density: Math.random() + 0.5,
+                                friction: Math.random() * 0.1,
+                                bloom: Math.random() > 0.7,
+                                bloomIntensity: Math.random() * 0.8 + 0.2,
+                                flicker: Math.random() > 0.8,
+                                flickerRate: Math.random() * 20 + 10,
+                                ghosting: Math.random() > 0.82,
+                                ghostCount: Math.floor(Math.random() * 8) + 2,
+                                ghostAlpha: Math.random() * 0.4 + 0.1,
+                                temporal: Math.random() > 0.88,
+                                timeWarp: Math.random() * 2 + 0.5,
+                                harmonic: Math.random() > 0.85,
+                                harmonicFreq: Math.random() * 0.3 + 0.1,
+                                harmonicAmplitude: Math.random() * 20 + 5,
+                                recursive: Math.random() > 0.9,
+                                recursionDepth: Math.floor(Math.random() * 5) + 1,
+                                metamorphic: Math.random() > 0.88,
+                                morphRate: Math.random() * 0.1 + 0.01,
+                                morphShapes: [Math.random(), Math.random(), Math.random()],
+                                prismatic: Math.random() > 0.85,
+                                prismRotation: Math.random() * 360,
+                                prismIntensity: Math.random() * 0.8 + 0.2
+                            };
+                            bullets.push(chaosBullet);
+                        }
+                    }
                 }
             };
 
@@ -10192,8 +10338,8 @@
                 fireRateBoost: {
                     name: 'Rapid Fire',
                     icon: '🔥',
-                    duration: 8000,
-                    active: false, effect: () => { player.fireRateBoost = 250 }
+                    duration: 80000,
+                    active: false, effect: () => { player.fireRateBoost = 15 }
                 },
                 invincibility: {
                     name: 'Invincible',
@@ -10223,22 +10369,12 @@
                     active: false,
                     effect: () => { enemies.damageBoost = 0.25, enemies.speedBoost = 0.05 }
                 },
-                chaos: {
-                    name: 'Chaos',
-                    icon: '🌪️',
-                    duration: 20000,
-                    active: false,
-                    chaosLevel: 0,
-                    effect: () => { 
-                        powerups.chaos.chaosLevel = 1;
-                    }
-                },
                 pulse_powerup: {
                     name: 'Pulse',
                     icon: '📡',
                     duration: 15000,
                     lastTrigger: 0,
-                    effect: () =>  {
+                    effect: () => {
                         if (activePowerups.pulse && now - powerups.pulse.lastTrigger >= 5000) {
                             powerups.pulse.lastTrigger = now;
                             enemies.forEach(e => {
@@ -10553,7 +10689,23 @@
                                 pierceCount: 100
                             });
                         } else if (currentWeapon === 'chaos') {
-                            const chaosRandomBulletCount = 500;
+                            bullets.push({
+                                x: player.x + player.width / 2,
+                                y: player.y,
+                                width: currentWep.bulletSize.w,
+                                height: currentWep.bulletSize.h,
+                                vx: 0,
+                                vy: -currentWep.bulletSpeed,
+                                damage: currentWep.damage * damageMultiplier,
+                                type: 'chaos',
+                                piercing: true,
+                                pierceCount: 100
+                            });
+                        }
+
+                        // ---- CHAOS POWERUP ----
+                        if (activePowerups.chaos && now < activePowerups.chaos) {
+                            const chaosRandomBulletCount = Math.floor(Math.random() * 45) + 5;
                             for (let chaosIdx = 0; chaosIdx < chaosRandomBulletCount; chaosIdx++) {
                                 const chaosRandomAngle = Math.random() * Math.PI * 2;
                                 const chaosRandomSpeed = Math.random() * 20 + 5;
@@ -10660,86 +10812,6 @@
 
                     // ---- BULLET UPDATES ----
                     bullets.forEach((b, bi) => {
-                        // Chaos bullet effects
-                        if (b.type === 'chaos') {
-                            // Wave motion
-                            if (b.wave) {
-                                const waveOffset = Math.sin(b.wavePhase) * b.waveAmplitude;
-                                b.y += waveOffset * 0.1;
-                                b.wavePhase += b.waveFrequency;
-                                b.waveAmplitude *= (1 - b.waveDecay);
-                            }
-
-                            // Glitch effect
-                            if (b.glitch && Math.random() > 0.8) {
-                                b.x += (Math.random() - 0.5) * b.glitchAmount * 10;
-                                b.y += (Math.random() - 0.5) * b.glitchAmount * 10;
-                            }
-
-                            // Drift
-                            b.vx += (Math.random() - 0.5) * b.drift * 0.1;
-                            b.vy += (Math.random() - 0.5) * b.drift * 0.1;
-
-                            // Magnetism towards nearest enemy
-                            if (b.magnetism && enemies.length > 0) {
-                                const nearestEnemy = enemies.reduce((closest, e) => {
-                                    const d1 = Math.hypot(e.x - b.x, e.y - b.y);
-                                    const d2 = Math.hypot(closest.x - b.x, closest.y - b.y);
-                                    return d1 < d2 ? e : closest;
-                                }, enemies[0]);
-                                const dx = nearestEnemy.x - b.x;
-                                const dy = nearestEnemy.y - b.y;
-                                const dist = Math.hypot(dx, dy);
-                                if (dist > 0 && dist < 200) {
-                                    b.vx += (dx / dist) * b.magnetStrength * 0.01;
-                                    b.vy += (dy / dist) * b.magnetStrength * 0.01;
-                                }
-                            }
-
-                            // Rotation
-                            if (b.spin) {
-                                b.rotation = (b.rotation || 0) + b.spinSpeed;
-                            }
-
-                            // Jitter
-                            if (b.jitter > 0) {
-                                b.x += (Math.random() - 0.5) * b.jitter;
-                                b.y += (Math.random() - 0.5) * b.jitter;
-                            }
-
-                            // Lifespan check
-                            if (now - b.birthTime > b.lifespan) {
-                                bullets.splice(bi, 1);
-                                return;
-                            }
-
-                            // Bouncing
-                            if (b.bouncing) {
-                                if (b.x < 0) {
-                                    b.vx = Math.abs(b.vx);
-                                    b.x = 0;
-                                    b.bounceCount++;
-                                } else if (b.x > 600) {
-                                    b.vx = -Math.abs(b.vx);
-                                    b.x = 600;
-                                    b.bounceCount++;
-                                }
-                                if (b.y < 0) {
-                                    b.vy = Math.abs(b.vy);
-                                    b.y = 0;
-                                    b.bounceCount++;
-                                } else if (b.y > 500) {
-                                    b.vy = -Math.abs(b.vy);
-                                    b.y = 500;
-                                    b.bounceCount++;
-                                }
-                                if (b.bounceCount > b.maxBounces) {
-                                    bullets.splice(bi, 1);
-                                    return;
-                                }
-                            }
-                        }
-
                         if (b.tracking && b.target) {
                             const dx = b.target.x - b.x;
                             const dy = b.target.y - b.y;
@@ -10754,9 +10826,7 @@
                         }
 
                         if (b.y < -50 || b.x < -50 || b.x > 650 || b.y > 550) {
-                            if (!b.type || b.type !== 'chaos' || !b.bouncing) {
-                                bullets.splice(bi, 1);
-                            }
+                            bullets.splice(bi, 1);
                         }
                     });
 
@@ -11041,53 +11111,17 @@
 
                     // Draw bullets
                     bullets.forEach(b => {
-                        if (b.type === 'chaos') {
-                            ctx.save();
-                            ctx.globalAlpha = b.alpha || 1;
-                            
-                            // Draw trail
-                            if (b.trail && b.trailPositions.length > 0) {
-                                for (let i = 0; i < b.trailPositions.length; i++) {
-                                    const trailAlpha = (i / b.trailPositions.length) * 0.5;
-                                    ctx.globalAlpha = trailAlpha;
-                                    const tp = b.trailPositions[i];
-                                    ctx.fillStyle = b.color;
-                                    ctx.fillRect(tp.x, tp.y, b.width * 0.7, b.height * 0.7);
-                                }
-                            }
-
-                            // Draw main bullet with rotation
-                            ctx.globalAlpha = b.alpha || 1;
-                            ctx.translate(b.x + b.width / 2, b.y + b.height / 2);
-                            if (b.rotation) ctx.rotate((b.rotation * Math.PI) / 180);
-                            ctx.fillStyle = b.color;
-                            ctx.fillRect(-b.width / 2, -b.height / 2, b.width, b.height);
-
-                            // Glow effect
-                            ctx.strokeStyle = b.color;
-                            ctx.globalAlpha = 0.3;
-                            ctx.lineWidth = 2;
-                            ctx.strokeRect(-b.width / 2 - 2, -b.height / 2 - 2, b.width + 4, b.height + 4);
-
-                            ctx.restore();
-
-                            // Add trail position
-                            if (!b.trailPositions) b.trailPositions = [];
-                            b.trailPositions.push({ x: b.x, y: b.y });
-                            if (b.trailPositions.length > b.trail) b.trailPositions.shift();
+                        const wep = weapons[b.type];
+                        ctx.fillStyle = wep.color;
+                        if (b.type === 'nova') {
+                            ctx.beginPath();
+                            ctx.arc(b.x + b.width / 2, b.y + b.height / 2, b.width, 0, Math.PI * 2);
+                            ctx.fill();
+                        } else if (b.type === 'laser') {
+                            ctx.fillStyle = 'rgba(255, 107, 53, 0.8)';
+                            ctx.fillRect(b.x, b.y - 15, b.width + 2, b.height + 30);
                         } else {
-                            const wep = weapons[b.type];
-                            ctx.fillStyle = wep.color;
-                            if (b.type === 'nova') {
-                                ctx.beginPath();
-                                ctx.arc(b.x + b.width / 2, b.y + b.height / 2, b.width, 0, Math.PI * 2);
-                                ctx.fill();
-                            } else if (b.type === 'laser') {
-                                ctx.fillStyle = 'rgba(255, 107, 53, 0.8)';
-                                ctx.fillRect(b.x, b.y - 15, b.width + 2, b.height + 30);
-                            } else {
-                                ctx.fillRect(b.x, b.y, b.width, b.height);
-                            }
+                            ctx.fillRect(b.x, b.y, b.width, b.height);
                         }
                     });
 
@@ -11163,20 +11197,7 @@
 
                     ctx.font = '11px Arial';
                     ctx.fillText(`Weapon: ${weapons[currentWeapon].name}`, 10, 85);
-                    
-                    // Nova charge display
-                    if (currentWeapon === 'nova') {
-                        ctx.fillStyle = '#666';
-                        ctx.fillRect(10, 95, 100, 6);
-                        ctx.fillStyle = '#fb7185';
-                        ctx.fillRect(10, 95, (player.weaponCharge / 100) * 100, 6);
-                        ctx.fillStyle = '#fff';
-                        ctx.font = '10px Arial';
-                        ctx.fillText(`Charge: ${Math.round(player.weaponCharge)}%`, 115, 100);
-                    }
-                    
-                    ctx.font = '11px Arial';
-                    ctx.fillText(`Kills: ${totalKills} | Shots: ${totalShotsFired}`, 10, 110);
+                    ctx.fillText(`Kills: ${totalKills} | Shots: ${totalShotsFired}`, 10, 100);
 
                     // Weapon indicator
                     ctx.fillStyle = weapons[currentWeapon].color;
