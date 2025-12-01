@@ -10689,18 +10689,7 @@
                                 pierceCount: 100
                             });
                         } else if (currentWeapon === 'chaos') {
-                            bullets.push({
-                                x: player.x + player.width / 2,
-                                y: player.y,
-                                width: currentWep.bulletSize.w,
-                                height: currentWep.bulletSize.h,
-                                vx: 0,
-                                vy: -currentWep.bulletSpeed,
-                                damage: currentWep.damage * damageMultiplier,
-                                type: 'chaos',
-                                piercing: true,
-                                pierceCount: 100
-                            });
+                            currentWep.effect();
                         }
 
                         // ---- CHAOS POWERUP ----
@@ -11111,8 +11100,14 @@
 
                     // Draw bullets
                     bullets.forEach(b => {
-                        const wep = weapons[b.type];
-                        ctx.fillStyle = wep.color;
+                        if (b.type === 'chaos') {
+                            ctx.fillStyle = b.color;
+                            ctx.globalAlpha = b.alpha || 1;
+                        } else {
+                            const wep = weapons[b.type];
+                            ctx.fillStyle = wep.color;
+                        }
+
                         if (b.type === 'nova') {
                             ctx.beginPath();
                             ctx.arc(b.x + b.width / 2, b.y + b.height / 2, b.width, 0, Math.PI * 2);
@@ -11123,6 +11118,7 @@
                         } else {
                             ctx.fillRect(b.x, b.y, b.width, b.height);
                         }
+                        ctx.globalAlpha = 1; // Reset alpha
                     });
 
                     // Draw enemies
