@@ -13,7 +13,7 @@ import { log } from './Shared/utils.js';
 export async function loadModeHTML(mode, settings, logFunction) {
     let htmlPath;
     if (mode === 'gamecenter') {
-        htmlPath = './gamecenter.html';
+        htmlPath = './Core/gamecenter.html';
     } else {
         htmlPath = `./Core/${mode}.html`;
     }
