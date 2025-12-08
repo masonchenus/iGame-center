@@ -16,6 +16,8 @@ out/
 coverage/
 .nyc_output/
 *.lcov
+test-results/
+debug_screenshot.png
 
 # Environment variables
 .env

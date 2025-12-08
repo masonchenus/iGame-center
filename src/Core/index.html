@@ -7690,13 +7690,22 @@
             if (!bgAngleSettingsGlobal || !angleValueSettingsGlobal) return;
             const angle = bgAngleSettingsGlobal.value + 'deg';
             angleValueSettingsGlobal.textContent = bgAngleSettingsGlobal.value + '°';
+            const startScreen = document.getElementById('startScreen');
 
             if (globalBgMode === 'solid') {
-                document.body.style.background = globalColorStops[0].color;
+                const solidColor = globalColorStops[0].color;
+                document.body.style.background = solidColor;
+                if (startScreen) {
+                    startScreen.style.background = solidColor;
+                }
             } else {
                 const sorted = [...globalColorStops].sort((a, b) => a.position - b.position);
                 const gradientStops = sorted.map(s => `${s.color} ${s.position}%`).join(', ');
-                document.body.style.background = `linear-gradient(${angle}, ${gradientStops})`;
+                const gradientValue = `linear-gradient(${angle}, ${gradientStops})`;
+                document.body.style.background = gradientValue;
+                if (startScreen) {
+                    startScreen.style.background = gradientValue;
+                }
             }
         }
 
