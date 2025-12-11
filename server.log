@@ -1,3 +1,6 @@
+
+> gamecenter@1.0.1 start
+> node src/main.js
 Traceback (most recent call last):
   File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 197, in _run_module_as_main
     return _run_code(code, main_globals, None,

@@ -12835,6 +12835,7 @@
                                 pierceCount: 100
                             });
                         } else if (currentWeapon === 'chaos') {
+                            currentWep.effect();
                             currentWep.effect(currentWep, now);
                         }
 
@@ -13814,6 +13815,23 @@
                                 }
                             }
 
+                    // Draw bullets
+                    bullets.forEach(b => {
+                        if (b.type === 'chaos') {
+                            ctx.fillStyle = b.color;
+                            ctx.globalAlpha = b.alpha || 1;
+                        } else {
+                            const wep = weapons[b.type];
+                            ctx.fillStyle = wep.color;
+                        }
+
+                        if (b.type === 'nova') {
+                            ctx.beginPath();
+                            ctx.arc(b.x + b.width / 2, b.y + b.height / 2, b.width, 0, Math.PI * 2);
+                            ctx.fill();
+                        } else if (b.type === 'laser') {
+                            ctx.fillStyle = 'rgba(255, 107, 53, 0.8)';
+                            ctx.fillRect(b.x, b.y - 15, b.width + 2, b.height + 30);
                             if (b.bloom) {
                                 ctx.globalAlpha = baseAlpha * b.bloomIntensity * 0.3;
                                 for (let i = 2; i <= 4; i++) {
@@ -13860,6 +13878,7 @@
                         } else {
                             ctx.fillRect(b.x, b.y, b.width, b.height);
                         }
+                        ctx.globalAlpha = 1; // Reset alpha
                     });
 
                     // Draw enemies
