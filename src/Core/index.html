@@ -6740,55 +6740,9 @@
 
                     boss.attackCooldown--;
                     if (boss.attackCooldown <= 0) {
-                        // Boss attack patterns
-                        boss.attackType = Math.floor(Math.random() * 3);
-                        if (boss.attackType === 0) {
-                            // Spread shot attack
-                            for (let i = -4; i <= 4; i++) {
-                                asteroids.push({
-                                    x: boss.x,
-                                    y: boss.y,
-                                    vx: Math.sin(i * 0.15) * 4,
-                                    vy: 4 + Math.random() * 2,
-                                    r: 8,
-                                    health: 64,
-                                    maxHealth: 64,
-                                    isEnemyProjectile: true
-                                });
-                            }
-                        } else if (boss.attackType === 1) {
-                            // Laser beam attack
-                            const baseAngle = Math.atan2(ship.y - boss.y, ship.x - boss.x);
-                            for (let i = -1; i <= 1; i++) {
-                                const angle = baseAngle + i * 0.5;
-                                asteroids.push({
-                                    x: boss.x,
-                                    y: boss.y,
-                                    vx: Math.cos(angle) * 5,
-                                    vy: Math.sin(angle) * 5,
-                                    r: 6,
-                                    health: 48,
-                                    maxHealth: 48,
-                                    isEnemyProjectile: true
-                                });
-                            }
-                        } else {
-                            // Spiral attack
-                            const spiralAngle = (Date.now() % 2000) / 2000 * Math.PI * 2;
-                            for (let i = 0; i < 6; i++) {
-                                const angle = spiralAngle + i * (Math.PI * 2 / 6);
-                                asteroids.push({
-                                    x: boss.x + Math.cos(angle) * 20,
-                                    y: boss.y + Math.sin(angle) * 20,
-                                    vx: Math.cos(angle) * 3,
-                                    vy: Math.sin(angle) * 3,
-                                    r: 5,
-                                    health: 40,
-                                    maxHealth: 40,
-                                    isEnemyProjectile: true
-                                });
-                            }
-                        }
+                        const attackNames = Object.keys(bossAttacks);
+                        const attack = bossAttacks[attackNames[Math.floor(Math.random() * attackNames.length)]];
+                        attack(boss);
                         boss.attackCooldown = 60 + Math.random() * 40;
                     }
                 }
@@ -10705,7 +10659,7 @@
                 const typeNames = Object.keys(enemyTypes);
                 for (let row = 0; row < 7 + level; row++) {
                     for (let col = 0; col < 10; col++) {
-                        const typeIndex = (row + col) % typeNames.length;
+                        const typeIndex = Math.floor(Math.random() * typeNames.length);
                         const typeName = typeNames[typeIndex];
                         const type = enemyTypes[typeName];
                         const baseHealth = configuredHealth;
@@ -11093,6 +11047,448 @@
                 chargeTime: 0
             };
 
+            // ============ BOSS ATTACKS ============
+            const bossAttacks = {
+                //Simple(6)
+                singleShot: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        enemyBullets.push({
+                            x: boss.x + boss.width / 2,
+                            y: boss.y + boss.height,
+                            width: 5,
+                            height: 15,
+                            speed: 5
+                        });
+                        boss.lastFire = now;
+                    }
+                },
+                doubleShot: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        enemyBullets.push({
+                            x: boss.x + boss.width / 4,
+                            y: boss.y + boss.height,
+                            width: 5,
+                            height: 15,
+                            speed: 5
+                        });
+                        enemyBullets.push({
+                            x: boss.x + (boss.width * 3) / 4,
+                            y: boss.y + boss.height,
+                            width: 5,
+                            height: 15,
+                            speed: 5
+                        });
+                        boss.lastFire = now;
+                    }
+                },
+                tripleShot: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        enemyBullets.push({
+                            x: boss.x + boss.width / 2,
+                            y: boss.y + boss.height,
+                            width: 5,
+                            height: 15,
+                            speed: 5,
+                            angle: 0
+                        });
+                        enemyBullets.push({
+                            x: boss.x + boss.width / 2,
+                            y: boss.y + boss.height,
+                            width: 5,
+                            height: 15,
+                            speed: 5,
+                            angle: -0.1
+                        });
+                        enemyBullets.push({
+                            x: boss.x + boss.width / 2,
+                            y: boss.y + boss.height,
+                            width: 5,
+                            height: 15,
+                            speed: 5,
+                            angle: 0.1
+                        });
+                        boss.lastFire = now;
+                    }
+                },
+                shotgun: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        for (let i = 0; i < 5; i++) {
+                            enemyBullets.push({
+                                x: boss.x + boss.width / 2,
+                                y: boss.y + boss.height,
+                                width: 5,
+                                height: 10,
+                                speed: 5 + Math.random() * 2,
+                                angle: (Math.random() - 0.5) * 0.5
+                            });
+                        }
+                        boss.lastFire = now;
+                    }
+                },
+                rearShot: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        enemyBullets.push({
+                            x: boss.x + boss.width / 2,
+                            y: boss.y,
+                            width: 5,
+                            height: 15,
+                            speed: -5
+                        });
+                        boss.lastFire = now;
+                    }
+                },
+                sideShots: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        enemyBullets.push({
+                            x: boss.x,
+                            y: boss.y + boss.height / 2,
+                            width: 15,
+                            height: 5,
+                            speed: 5,
+                            angle: -Math.PI / 2
+                        });
+                        enemyBullets.push({
+                            x: boss.x + boss.width,
+                            y: boss.y + boss.height / 2,
+                            width: 15,
+                            height: 5,
+                            speed: 5,
+                            angle: Math.PI / 2
+                        });
+                        boss.lastFire = now;
+                    }
+                },
+                //Medium(13)
+                spreadShot: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        for (let i = -2; i <= 2; i++) {
+                            enemyBullets.push({
+                                x: boss.x + boss.width / 2,
+                                y: boss.y + boss.height,
+                                width: 5,
+                                height: 15,
+                                speed: 5,
+                                angle: i * 0.1
+                            });
+                        }
+                        boss.lastFire = now;
+                    }
+                },
+                wave: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        const bullet = {
+                            x: boss.x + boss.width / 2,
+                            y: boss.y + boss.height,
+                            width: 10,
+                            height: 10,
+                            speed: 3,
+                            amplitude: 2,
+                            frequency: 0.1,
+                            startY: boss.y + boss.height,
+                            angle: 0
+                        };
+                        enemyBullets.push(bullet);
+                        boss.lastFire = now;
+                    }
+                },
+                honing: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        const dx = player.x - (boss.x + boss.width / 2);
+                        const dy = player.y - (boss.y + boss.height);
+                        const angle = Math.atan2(dy, dx);
+                        enemyBullets.push({
+                            x: boss.x + boss.width / 2,
+                            y: boss.y + boss.height,
+                            width: 8,
+                            height: 8,
+                            speed: 4,
+                            angle: angle
+                        });
+                        boss.lastFire = now;
+                    }
+                },
+                burstFire: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        for (let i = 0; i < 3; i++) {
+                            setTimeout(() => {
+                                enemyBullets.push({
+                                    x: boss.x + boss.width / 2,
+                                    y: boss.y + boss.height,
+                                    width: 5,
+                                    height: 15,
+                                    speed: 5
+                                });
+                            }, i * 100);
+                        }
+                        boss.lastFire = now;
+                    }
+                },
+                chargedShot: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        enemyBullets.push({
+                            x: boss.x + boss.width / 2,
+                            y: boss.y + boss.height,
+                            width: 15,
+                            height: 30,
+                            speed: 7
+                        });
+                        boss.lastFire = now;
+                    }
+                },
+                boomerang: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        enemyBullets.push({
+                            x: boss.x + boss.width / 2,
+                            y: boss.y + boss.height,
+                            width: 10,
+                            height: 10,
+                            speed: 5,
+                            isBoomerang: true,
+                            life: 2
+                        });
+                        boss.lastFire = now;
+                    }
+                },
+                wall: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        for (let i = 0; i < 10; i++) {
+                            enemyBullets.push({
+                                x: i * 60,
+                                y: boss.y + boss.height,
+                                width: 5,
+                                height: 15,
+                                speed: 3
+                            });
+                        }
+                        boss.lastFire = now;
+                    }
+                },
+                rain: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        for (let i = 0; i < 10; i++) {
+                            enemyBullets.push({
+                                x: Math.random() * 600,
+                                y: 0,
+                                width: 3,
+                                height: 20,
+                                speed: 4
+                            });
+                        }
+                        boss.lastFire = now;
+                    }
+                },
+                cross: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        for (let i = 0; i < 4; i++) {
+                            enemyBullets.push({
+                                x: boss.x + boss.width / 2,
+                                y: boss.y + boss.height / 2,
+                                width: 8,
+                                height: 8,
+                                speed: 4,
+                                angle: (i * Math.PI) / 2
+                            });
+                        }
+                        boss.lastFire = now;
+                    }
+                },
+                ricochet: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        enemyBullets.push({
+                            x: boss.x + boss.width / 2,
+                            y: boss.y + boss.height,
+                            width: 10,
+                            height: 10,
+                            speed: 5,
+                            angle: (Math.random() - 0.5) * Math.PI / 4,
+                            ricochet: 3
+                        });
+                        boss.lastFire = now;
+                    }
+                },
+                //Complex(19)
+                spiral: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        const bulletsCount = 20;
+                        for (let i = 0; i < bulletsCount; i++) {
+                            const angle = (2 * Math.PI / bulletsCount) * i + boss.spiralAngle;
+                            enemyBullets.push({
+                                x: boss.x + boss.width / 2,
+                                y: boss.y + boss.height / 2,
+                                width: 5,
+                                height: 5,
+                                speed: 3,
+                                angle: angle
+                            });
+                        }
+                        boss.spiralAngle += 0.3;
+                        boss.lastFire = now;
+                    }
+                },
+                laser: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        enemyBullets.push({
+                            x: boss.x + boss.width / 2 - 2.5,
+                            y: boss.y + boss.height,
+                            width: 5,
+                            height: 500,
+                            speed: 0,
+                            isLaser: true,
+                            life: 1
+                        });
+                        boss.lastFire = now;
+                    }
+                },
+                spinningBlades: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        const bulletsCount = 8;
+                        for (let i = 0; i < bulletsCount; i++) {
+                            const angle = (2 * Math.PI / bulletsCount) * i;
+                            enemyBullets.push({
+                                x: boss.x + boss.width / 2,
+                                y: boss.y + boss.height / 2,
+                                width: 20,
+                                height: 5,
+                                speed: 3,
+                                angle: angle,
+                                isBlade: true,
+                                rotation: 0
+                            });
+                        }
+                        boss.lastFire = now;
+                    }
+                },
+                mineLayer: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        enemyBullets.push({
+                            x: boss.x + boss.width / 2,
+                            y: boss.y + boss.height,
+                            width: 15,
+                            height: 15,
+                            speed: 1,
+                            isMine: true,
+                            life: 10
+                        });
+                        boss.lastFire = now;
+                    }
+                },
+                turret: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        enemyBullets.push({
+                            x: boss.x + boss.width / 2,
+                            y: boss.y + boss.height,
+                            width: 20,
+                            height: 20,
+                            speed: 0,
+                            isTurret: true,
+                            life: 15,
+                            fireRate: 30,
+                            lastFire: 0
+                        });
+                        boss.lastFire = now;
+                    }
+                },
+                blackhole: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        enemyBullets.push({
+                            x: boss.x + boss.width / 2,
+                            y: boss.y + boss.height,
+                            width: 30,
+                            height: 30,
+                            speed: 1,
+                            isBlackhole: true,
+                            life: 20
+                        });
+                        boss.lastFire = now;
+                    }
+                },
+                //Ultra Mega Complex(12)
+                bulletHell: (boss) => {
+                    if (now > boss.lastFire + (boss.fireRate / 2)) {
+                        const bulletsCount = 15;
+                        for (let i = 0; i < bulletsCount; i++) {
+                            const angle = Math.random() * 2 * Math.PI;
+                            enemyBullets.push({
+                                x: boss.x + boss.width / 2,
+                                y: boss.y + boss.height / 2,
+                                width: 7,
+                                height: 7,
+                                speed: 2 + Math.random() * 2,
+                                angle: angle
+                            });
+                        }
+                        boss.lastFire = now;
+                    }
+                },
+                orbitalStrike: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate * 2) {
+                        for (let i = 0; i < 3; i++) {
+                            setTimeout(() => {
+                                enemyBullets.push({
+                                    x: player.x,
+                                    y: 0,
+                                    width: 10,
+                                    height: 500,
+                                    speed: 0,
+                                    isLaser: true,
+                                    life: 0.5
+                                });
+                            }, i * 500);
+                        }
+                        boss.lastFire = now;
+                    }
+                },
+                swarm: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        const bulletsCount = 30;
+                        for (let i = 0; i < bulletsCount; i++) {
+                            enemyBullets.push({
+                                x: boss.x + boss.width / 2,
+                                y: boss.y + boss.height,
+                                width: 5,
+                                height: 5,
+                                speed: 3 + Math.random(),
+                                angle: (Math.random() - 0.5) * 0.2,
+                                isSwarm: true
+                            });
+                        }
+                        boss.lastFire = now;
+                    }
+                },
+                timeBomb: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate) {
+                        enemyBullets.push({
+                            x: boss.x + boss.width / 2,
+                            y: boss.y + boss.height,
+                            width: 20,
+                            height: 20,
+                            speed: 2,
+                            isTimeBomb: true,
+                            life: 3
+                        });
+                        boss.lastFire = now;
+                    }
+                },
+                doomsday: (boss) => {
+                    if (now > boss.lastFire + boss.fireRate * 5) {
+                        for (let i = 0; i < 50; i++) {
+                            setTimeout(() => {
+                                const angle = Math.random() * 2 * Math.PI;
+                                const speed = 2 + Math.random() * 4;
+                                enemyBullets.push({
+                                    x: Math.random() * 600,
+                                    y: Math.random() * 500,
+                                    width: 8,
+                                    height: 8,
+                                    speed: speed,
+                                    angle: angle
+                                });
+                            }, Math.random() * 3000);
+                        }
+                        boss.lastFire = now;
+                    }
+                }
+            };
             // ============ ENEMY TYPES SYSTEM ============
             const enemyTypes = {
                 basic: {
@@ -11104,7 +11500,8 @@
                     healthMultiplier: 1,
                     color: '#00ff00',
                     fireRate: 0.008,
-                    damage: 10
+                    damage: 10,
+                    attacks: ['singleShot', 'doubleShot']
                 },
                 tank: {
                     name: 'Tank',

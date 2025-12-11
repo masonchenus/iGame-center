@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { log } from '../shared/utils.js';
+import { log } from '../Shared/utils.js';
 
 // Mock the fetch function
 global.fetch = jest.fn();
