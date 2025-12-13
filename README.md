@@ -54,7 +54,7 @@ npm run test
 
 ## Errors
 
-1. **: If you encounter any errors during installation or usage, please check your Node.js version and try reinstalling dependencies. If the issue persists, feel free to submit a pull request on my "Issues.txt" file. and I will accept it and ask bots to fix it.**
+1. **: If you encounter any errors during installation or usage, please check your Node.js version and try reinstalling dependencies. If the issue persists, feel free to submit a pull request on my "Issues.txt" file. and I will accept it and then ask bots to fix it.**
 </br>
 
 2. **If you have any questions about this project, please contact me. masonchenus@gmail.com**
