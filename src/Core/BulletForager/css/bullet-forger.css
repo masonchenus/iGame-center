@@ -1,44 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 :root {
-    --bullet-forager-color: #009688;
-    --bullet-forager-background-color: rgba(255, 255, 255, .1);
-    --bullet-forager-border-radius: 3px;
-    --bullet-forager-font-size: 14px;
-    --bullet-forager-line-height: 1.7;
-    --bullet-forager-padding: 1em;
-    --bullet-forager-text-align: left;
-    --bullet-forager-width: 300px;
-    --bullet-forager-z-index: 9999;
-    --bullet-forager-opacity: 1;
-    --bullet-forager-transition-duration: .3s;
-}
-font-family {
-    font-family: 'Roboto', sans-serif;
-}
-.preset-panel {
-  margin-bottom: 20px;
+  --forger-bg: #1a1a1a;
+  --forger-panel-bg: #2a2a2a;
+  --forger-border: #444;
+  --forger-text: #f0f0f0;
+  --forger-text-secondary: #aaa;
+  --forger-primary: #00aaff;
+  --forger-primary-hover: #0077cc;
+  --forger-font: 'Inter', sans-serif;
 }
 
-.preset-buttons {
+body {
+  font-family: var(--forger-font);
+  background-color: var(--forger-bg);
+  color: var(--forger-text);
+  margin: 0;
+  padding: 1em;
+}
+
+.bullet-forger-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  padding: 1.5em;
+  background-color: var(--forger-bg);
+  border-radius: 10px;
+}
+
+.forger-header {
+  text-align: center;
+  border-bottom: 1px solid var(--forger-border);
+  padding-bottom: 1em;
+}
+
+.forger-header h1 {
+  margin: 0;
+  font-size: 2em;
+  font-weight: 700;
+  color: var(--forger-primary);
+}
+
+.forger-main {
+  display: flex;
+  gap: 1.5em;
+}
+
+.forger-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  flex: 1;
+}
+
+.forger-panel {
+  background-color: var(--forger-panel-bg);
+  border: 1px solid var(--forger-border);
+  border-radius: 8px;
+  padding: 1.5em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.forger-panel h2,
+.forger-panel h3 {
+  margin: 0;
+  font-size: 1.25em;
+  font-weight: 600;
+  color: var(--forger-primary);
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid var(--forger-border);
+}
+
+.forger-panel h4 {
+    margin: 0;
+    font-size: 1em;
+    font-weight: 500;
+    color: var(--forger-text-secondary);
+}
+
+.workflow-buttons,
+.preset-buttons,
+.block-toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  max-height: 200px; /* Adjust as needed */
-  overflow-y: auto;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  gap: 0.75em;
 }
 
-.preset-btn {
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
+.forger-btn {
+  background-color: var(--forger-primary);
+  color: #fff;
+  border: none;
   border-radius: 5px;
-  padding: 5px 10px;
+  padding: 0.75em 1.25em;
+  font-size: 0.9em;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.2s;
 }
 
-.preset-btn:hover {
-  background-color: #e0e0e0;
+.forger-btn:hover {
+  background-color: var(--forger-primary-hover);
 }
-@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+.param-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+}
+
+.param-category {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.param-inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1em;
+}
+
+.param-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.param-item-checkbox {
+    flex-direction: row;
+    align-items: center;
+}
+
+.param-item label {
+  font-size: 0.9em;
+  font-weight: 500;
+  color: var(--forger-text-secondary);
+}
+
+.param-item input[type="number"],
+.param-item input[type="text"],
+.param-item select {
+  width: 100%;
+  padding: 0.75em;
+  background-color: var(--forger-bg);
+  border: 1px solid var(--forger-border);
+  border-radius: 5px;
+  color: var(--forger-text);
+  font-size: 0.9em;
+}
+
+.param-input-group {
+    display: flex;
+    gap: 0.5em;
+}
+
+.code-textarea {
+  width: 100%;
+  min-height: 200px;
+  background-color: var(--forger-bg);
+  border: 1px solid var(--forger-border);
+  border-radius: 5px;
+  color: var(--forger-text);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9em;
+  padding: 1em;
+  resize: vertical;
+}
+
+.code-errors {
+  font-size: 0.9em;
+  padding: 0.5em;
+  border-radius: 5px;
+}
+
+.block-canvas {
+    background-color: var(--forger-bg);
+    border: 1px solid var(--forger-border);
+    border-radius: 5px;
+    padding: 1em;
+    min-height: 150px;
+}
+
+@media (max-width: 768px) {
+  .forger-main {
+    flex-direction: column;
+  }
+}

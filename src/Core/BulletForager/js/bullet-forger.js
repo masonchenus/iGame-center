@@ -300,30 +300,43 @@ class BulletForger {
   }
 
   initializeUI() {
-    this.createMainWorkflow();
-    this.createPresetPanel();
-    this.createParameterPanel();
-    this.createCodeEditor();
-    this.createBlockCoder();
+    const container = document.getElementById('bullet-forger-container') || this.createContainer();
+    container.innerHTML = `
+      <div class="forger-header">
+        <h1>Bullet Forger</h1>
+      </div>
+      <div class="forger-main">
+        <div class="forger-col" id="forger-col-1"></div>
+        <div class="forger-col" id="forger-col-2"></div>
+      </div>
+    `;
+
+    const col1 = document.getElementById('forger-col-1');
+    const col2 = document.getElementById('forger-col-2');
+
+    this.createMainWorkflow(col1);
+    this.createPresetPanel(col1);
+    this.createBlockCoder(col1);
+    this.createParameterPanel(col2);
+    this.createCodeEditor(col2);
   }
 
-  createMainWorkflow() {
-    const container = document.getElementById('bullet-forger-container') || this.createContainer();
+  createMainWorkflow(container) {
     const workflowPanel = document.createElement('div');
-    workflowPanel.className = 'workflow-panel';
+    workflowPanel.className = 'forger-panel workflow-panel';
     workflowPanel.innerHTML = `
-      <h2>Bullet Forger Workshop</h2>
+      <h2>Workshop</h2>
       <div class="workflow-buttons">
-        <button class="forger-btn import-btn" data-action="import">📥 Import Bullet</button>
-        <button class="forger-btn download-btn" data-action="download">📥 Download Bullet</button>
-        <button class="forger-btn save-btn" data-action="save">💾 Save Bullet</button>
-        <button class="forger-btn export-btn" data-action="export">📤 Export Bullet</button>
-        <button class="forger-btn use-btn" data-action="use-from-game">⚡ Use from Game</button>
-        <button class="forger-btn template-btn" data-action="start-template">📋 Start from Template</button>
-        <button class="forger-btn remix-btn" data-action="remix">🎨 Remix Bullet</button>
-        <button class="forger-btn custom-btn" data-action="custom-scratch">✨ Custom from Scratch</button>
-        <button class="forger-btn abilities-btn" data-action="customize-abilities">⚙️ Customize Abilities</button>
-        <button class="forger-btn speed-btn" data-action="customize-speed">⚡ Customize Speed</button>
+        <button class="forger-btn" data-action="import">Import</button>
+        <button class="forger-btn" data-action="download">Download</button>
+        <button class="forger-btn" data-action="save">Save</button>
+        <button class="forger-btn" data-action="export">Export</button>
+        <button class="forger-btn" data-action="use-from-game">Use from Game</button>
+        <button class="forger-btn" data-action="start-template">Template</button>
+        <button class="forger-btn" data-action="remix">Remix</button>
+        <button class="forger-btn" data-action="custom-scratch">Scratch</button>
+        <button class="forger-btn" data-action="customize-abilities">Abilities</button>
+        <button class="forger-btn" data-action="customize-speed">Speed</button>
       </div>
     `;
 
@@ -376,13 +389,12 @@ class BulletForger {
     }
   }
 
-  createPresetPanel() {
-    const container = document.getElementById('bullet-forger-container');
+  createPresetPanel(container) {
     const presetPanel = document.createElement('div');
-    presetPanel.className = 'preset-panel';
+    presetPanel.className = 'forger-panel preset-panel';
     presetPanel.id = 'preset-panel';
 
-    let html = '<h3>Weapon Presets</h3><div class="preset-buttons">';
+    let html = '<h3>Presets</h3><div class="preset-buttons">';
     for (const key in weaponPresets) {
       const preset = weaponPresets[key];
       html += `<button class="forger-btn preset-btn" data-preset="${key}">${preset.name}</button>`;
@@ -415,17 +427,16 @@ class BulletForger {
       if (oldPanel) {
           oldPanel.remove();
       }
-      this.createParameterPanel();
+      this.createParameterPanel(document.getElementById('forger-col-2'));
   }
 
-  createParameterPanel() {
-    const container = document.getElementById('bullet-forger-container');
+  createParameterPanel(container) {
     const paramPanel = document.createElement('div');
-    paramPanel.className = 'parameter-panel';
+    paramPanel.className = 'forger-panel parameter-panel';
     paramPanel.id = 'parameter-panel';
 
     const categories = this.getParameterCategories();
-    let html = '<h3>Bullet Parameters (200+)</h3><div class="param-categories">';
+    let html = '<h3>Parameters</h3><div class="param-categories">';
 
     for (const [category, params] of Object.entries(categories)) {
       html += `<div class="param-category">
@@ -433,40 +444,40 @@ class BulletForger {
         <div class="param-inputs">`;
 
       params.forEach(param => {
-        const value = this.currentBullet[param.key];
+        const value = this.currentBullet[param.key] || '';
         const inputId = `param-${param.key}`;
 
         if (param.type === 'dimensions') {
           html += `
             <div class="param-item">
-              <label for="${inputId}-w">${param.label}:</label>
-              <input type="number" id="${inputId}-w" data-param-part="w" data-param="bulletSize" value="${value.w}" style="width: 50px;">
-              <input type="number" id="${inputId}-h" data-param-part="h" data-param="bulletSize" value="${value.h}" style="width: 50px;">
+              <label for="${inputId}-w">${param.label}</label>
+              <div class="param-input-group">
+                <input type="number" id="${inputId}-w" data-param-part="w" data-param="bulletSize" value="${value.w}">
+                <input type="number" id="${inputId}-h" data-param-part="h" data-param="bulletSize" value="${value.h}">
+              </div>
             </div>`;
         } else if (param.type === 'number') {
           html += `
             <div class="param-item">
-              <label for="${inputId}">${param.label}:</label>
+              <label for="${inputId}">${param.label}</label>
               <input type="number" id="${inputId}" data-param="${param.key}" value="${value}" min="${param.min}" max="${param.max}" step="${param.step}">
             </div>`;
         } else if (param.type === 'color') {
           html += `
             <div class="param-item">
-              <label for="${inputId}">${param.label}:</label>
+              <label for="${inputId}">${param.label}</label>
               <input type="color" id="${inputId}" data-param="${param.key}" value="${value}">
             </div>`;
         } else if (param.type === 'checkbox') {
           html += `
-            <div class="param-item">
-              <label for="${inputId}">
-                <input type="checkbox" id="${inputId}" data-param="${param.key}" ${value ? 'checked' : ''}>
-                ${param.label}
-              </label>
+            <div class="param-item param-item-checkbox">
+              <input type="checkbox" id="${inputId}" data-param="${param.key}" ${value ? 'checked' : ''}>
+              <label for="${inputId}">${param.label}</label>
             </div>`;
         } else if (param.type === 'select') {
           html += `
             <div class="param-item">
-              <label for="${inputId}">${param.label}:</label>
+              <label for="${inputId}">${param.label}</label>
               <select id="${inputId}" data-param="${param.key}">`;
           param.options.forEach(opt => {
             html += `<option value="${opt}" ${value === opt ? 'selected' : ''}>${opt}</option>`;
@@ -568,21 +579,20 @@ getParameterCategories() {
     };
   }
 
-  createCodeEditor() {
-    const container = document.getElementById('bullet-forger-container');
+  createCodeEditor(container) {
     const editorPanel = document.createElement('div');
-    editorPanel.className = 'code-editor-panel';
+    editorPanel.className = 'forger-panel code-editor-panel';
     editorPanel.id = 'code-editor';
 
     editorPanel.innerHTML = `
-      <h3>Code Editor (Line-by-Line)</h3>
+      <h3>Code Editor</h3>
       <div class="editor-toolbar">
-        <button class="editor-btn" id="add-line">+ Add Line</button>
-        <button class="editor-btn" id="delete-line">- Delete Line</button>
-        <button class="editor-btn" id="apply-code">✓ Apply Code</button>
-        <button class="editor-btn" id="validate-code">⚠️ Validate</button>
+        <button class="forger-btn" id="add-line">Add Line</button>
+        <button class="forger-btn" id="delete-line">Delete Line</button>
+        <button class="forger-btn" id="apply-code">Apply</button>
+        <button class="forger-btn" id="validate-code">Validate</button>
       </div>
-      <textarea id="bullet-code" class="code-textarea" placeholder="// Edit bullet configuration as JSON or JavaScript&#10;const bullet = {&#10;  name: 'My Bullet',&#10;  damage: 50&#10;};"></textarea>
+      <textarea id="bullet-code" class="code-textarea" placeholder="const bullet = {\n  name: 'My Bullet',\n  damage: 50\n};"></textarea>
       <div id="code-errors" class="code-errors"></div>
     `;
 
@@ -647,26 +657,25 @@ getParameterCategories() {
     codeArea.value = lines.join('\n');
   }
 
-  createBlockCoder() {
-    const container = document.getElementById('bullet-forger-container');
+  createBlockCoder(container) {
     const blockPanel = document.createElement('div');
-    blockPanel.className = 'block-coder-panel';
+    blockPanel.className = 'forger-panel block-coder-panel';
     blockPanel.id = 'block-coder';
 
     blockPanel.innerHTML = `
-      <h3>Visual Block Coder</h3>
+      <h3>Block Coder</h3>
       <div class="block-toolbar">
-        <button class="block-btn" data-block="damage">💥 Damage Block</button>
-        <button class="block-btn" data-block="effect">✨ Effect Block</button>
-        <button class="block-btn" data-block="physics">🌍 Physics Block</button>
-        <button class="block-btn" data-block="spread">📍 Spread Block</button>
-        <button class="block-btn" data-block="trigger">⚡ Trigger Block</button>
-        <button class="block-btn" data-block="combo">🔗 Combo Block</button>
+        <button class="forger-btn" data-block="damage">Damage</button>
+        <button class="forger-btn" data-block="effect">Effect</button>
+        <button class="forger-btn" data-block="physics">Physics</button>
+        <button class="forger-btn" data-block="spread">Spread</button>
+        <button class="forger-btn" data-block="trigger">Trigger</button>
+        <button class="forger-btn" data-block="combo">Combo</button>
       </div>
       <div class="block-canvas" id="block-canvas">
-        <p>Drag blocks here to build bullet logic</p>
+        <p>Drag blocks here</p>
       </div>
-      <button class="block-btn" id="compile-blocks">🔨 Compile Blocks</button>
+      <button class="forger-btn" id="compile-blocks">Compile Blocks</button>
     `;
 
     container.appendChild(blockPanel);
