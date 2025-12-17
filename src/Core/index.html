@@ -12750,7 +12750,7 @@
                     symbol: '►',
                     width: 20,
                     height: 20,
-                    speedMultiplier: 2,
+                    speedMultiplier: 4,
                     healthMultiplier: 0.5,
                     color: '#ffff00',
                     fireRate: 0.012,
@@ -12791,16 +12791,6 @@
                     fireRate: 0.01,
                     damage: 25
                 },
-                insane: {
-                    name: 'Bonkers',
-                    symbol: '✹',
-                    width: 25,
-                    height: 25,
-                    speedMultiplier: 1.52625672519242587,
-                    healthMultiplier: 1.5,
-                    fireRate: 20,
-                    damage: Math.random() * 100 + 50
-                }
             };
             // ============ WEAPONS SYSTEM ============
             // 9 original weapons + new ones
@@ -12874,7 +12864,7 @@
                     color: '#fb7185',
                     fireRate: 10000,
                     damage: 200,
-                    bulletSpeed: 8,
+                    bulletSpeed: 31000000,
                     bulletSize: { w: 10, h: 10 },
                     spread: 0,
                     explosive: true,
@@ -12884,19 +12874,40 @@
                 tempest: {
                     name: 'Tempest',
                     color: '#a78bfa',
-                    fireRate: 100,
-                    damage: 5,
-                    bulletSpeed: 75,
+                    fireRate: 1,
+                    damage: 10,
+                    bulletSpeed: 21,
                     bulletSize: { w: 2, h: 6 },
                     spread: 120,
-                    rayCount: 720,
+                    rayCount: 576,
                     description: 'Bullet storm'
                 },
                 chaos: {
                     name: 'Chaos',
                     icon: '🌪️',
                     color: () => {
-                        const colors = ['#ff00ff', '#00ff00', '#ffff00', '#ff0000', '#00ffff', '#ff6600', '#00ff99', '#ff1493', '#00ced1', '#32cd32', '#ff4500', '#1e90ff', '#ffd700', '#ff69b4', '#00bfff', '#7fff00', '#adff2f', '#ff7f50', '#dc143c', '#00008b'];
+                        const colors = [
+                        '#ff00ff', 
+                        '#00ff00', 
+                        '#ffff00', 
+                        '#ff0000', 
+                        '#00ffff', 
+                        '#ff6600', 
+                        '#00ff99', 
+                        '#ff1493', 
+                        '#00ced1', 
+                        '#32cd32', 
+                        '#ff4500', 
+                        '#1e90ff', 
+                        '#ffd700', 
+                        '#ff69b4', 
+                        '#00bfff', 
+                        '#7fff00', 
+                        '#adff2f', 
+                        '#ff7f50', 
+                        '#dc143c', 
+                        '#00008b',
+                        ];
                         return colors[Math.floor(Math.random() * colors.length)];
                     },
                     fireRate: () => Math.floor(Math.random() * Math.floor(Math.random() * Math.floor(Math.random() * 50))) + 15,
@@ -14071,6 +14082,19 @@
                             });
                         } else if (currentWeapon === 'chaos') {
                             currentWep.effect(currentWep, now);
+                        } else if (currentWeapon === 'Ice Burst') {
+                            bullets.push({
+                                x: player.x + player.width / 2,
+                                y: player.y,
+                                width: currentWep.bulletSize.w,
+                                height: currentWep.bulletSize.h,
+                                vx: 0,
+                                vy: -currentWep.bulletSpeed,
+                                damage: currentWep.damage * damageMultiplier,
+                                type: 'Ice Burst',
+                                piercing: true,
+                                pierceCount: 100
+                            })
                         }
 
                         // ---- CHAOS POWERUP ----
@@ -14220,9 +14244,9 @@
 
                     if (keys[' '] && currentWeapon === 'nova') {
                         player.weaponCharge += 2;
-                        if (player.weaponCharge >= 100) {
+                        if (player.weaponCharge >= 90) {
                             player.weaponCharge = 0;
-                            for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 8) {
+                            for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 360) {
                                 const currentWep = weapons[currentWeapon];
                                 bullets.push({
                                     x: player.x + player.width / 2,
@@ -14231,8 +14255,12 @@
                                     height: currentWep.bulletSize.h,
                                     vx: Math.cos(angle) * currentWep.bulletSpeed,
                                     vy: Math.sin(angle) * currentWep.bulletSpeed,
-                                    damage: 20000,
-                                    type: 'nova'
+                                    damage: 200000,
+                                    type: 'nova',
+                                    explosive: true,
+                                    explosionRadius: 200000000,
+                                    birthTime: now,
+                                    lifespan: 20000
                                 });
                             }
                         }
