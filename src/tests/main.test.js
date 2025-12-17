@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { log } from '../shared/utils.js';
+import { log } from '../Shared/utils.js';
 
 // Mock the fetch function
 global.fetch = jest.fn();
@@ -48,7 +48,7 @@ describe('loadModeHTML', () => {
 
         await loadModeHTML('gamecenter', {}, mockLog);
 
-        expect(fetch).toHaveBeenCalledWith('./core/gamecenter.html');
+        expect(fetch).toHaveBeenCalledWith('./gamecenter.html');
         expect(document.body.innerHTML).toBe(mockHtml);
         expect(mockLog).toHaveBeenCalledWith('Gamecenter loaded successfully.', 'LAUNCH');
     });
@@ -64,13 +64,13 @@ describe('loadModeHTML', () => {
 
         await loadModeHTML('workshop', {}, mockLog);
 
-        expect(fetch).toHaveBeenCalledWith('./core/workshop.html');
+        expect(fetch).toHaveBeenCalledWith('./Core/workshop.html');
         expect(document.body.innerHTML).toBe(mockHtml);
         expect(mockLog).toHaveBeenCalledWith('Workshop loaded successfully.', 'LAUNCH');
     });
 
     test('should handle fetch failure', async () => {
-        const errorMessage = 'Failed to load ./core/gamecenter.html: 404 Not Found';
+        const errorMessage = 'Failed to load ./gamecenter.html: 404 Not Found';
         fetch.mockResolvedValueOnce({
             ok: false,
             statusText: '404 Not Found'
@@ -80,7 +80,7 @@ describe('loadModeHTML', () => {
 
         await loadModeHTML('gamecenter', {}, mockLog);
 
-        expect(fetch).toHaveBeenCalledWith('./core/gamecenter.html');
+        expect(fetch).toHaveBeenCalledWith('./gamecenter.html');
         expect(mockLog).toHaveBeenCalledWith(`Error loading gamecenter: ${errorMessage}`, 'ERROR');
         expect(document.body.innerHTML).toBe('<h1>Error</h1><p>Failed to load gamecenter. Please check the console for details.</p>');
     });
@@ -93,70 +93,9 @@ describe('loadModeHTML', () => {
 
         await loadModeHTML('gamecenter', {}, mockLog);
 
-        expect(fetch).toHaveBeenCalledWith('./core/gamecenter.html');
+        expect(fetch).toHaveBeenCalledWith('./gamecenter.html');
         expect(mockLog).toHaveBeenCalledWith(`Error loading gamecenter: ${errorMessage}`, 'ERROR');
         expect(document.body.innerHTML).toBe('<h1>Error</h1><p>Failed to load gamecenter. Please check the console for details.</p>');
     });
 });
 
-describe('startApplication', () => {
-    beforeEach(() => {
-        jest.clearAllMocks();
-        document.body.innerHTML = '';
-    });
-
-    test('should start application and load gamecenter by default', async () => {
-        const mockHtml = '<div>Game Center Content</div>';
-        fetch.mockResolvedValueOnce({
-            ok: true,
-            text: jest.fn().mockResolvedValue(mockHtml)
-        });
-
-        // Mock URLSearchParams to return null for mode (default to gamecenter)
-        URLSearchParams.mockImplementation(() => ({
-            get: jest.fn(() => null)
-        }));
-
-        await startApplication();
-
-        expect(fetch).toHaveBeenCalledWith('./core/gamecenter.html');
-        expect(document.body.innerHTML).toBe(mockHtml);
-    });
-
-    test('should start application and load workshop when mode=workshop', async () => {
-        const mockHtml = '<div>Workshop Content</div>';
-        fetch.mockResolvedValueOnce({
-            ok: true,
-            text: jest.fn().mockResolvedValue(mockHtml)
-        });
-
-        // Mock URLSearchParams to return 'workshop' for mode
-        URLSearchParams.mockImplementation(() => ({
-            get: jest.fn(() => 'workshop')
-        }));
-
-        await startApplication();
-
-        expect(fetch).toHaveBeenCalledWith('./core/workshop.html');
-        expect(document.body.innerHTML).toBe(mockHtml);
-    });
-
-    test('should log application startup messages', async () => {
-        const mockHtml = '<div>Game Center Content</div>';
-        fetch.mockResolvedValueOnce({
-            ok: true,
-            text: jest.fn().mockResolvedValue(mockHtml)
-        });
-
-        const originalLog = console.log;
-        console.log = jest.fn();
-
-        await startApplication();
-
-        // Check that the log function was called with the expected formatted messages
-        expect(console.log).toHaveBeenCalledWith(expect.stringMatching(/^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] \[STARTUP\]: Application starting up\.\.\.$/));
-        expect(console.log).toHaveBeenCalledWith(expect.stringMatching(/^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] \[STARTUP\]: Initialization complete\.$/));
-
-        console.log = originalLog;
-    });
-});

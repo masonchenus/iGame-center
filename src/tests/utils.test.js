@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { log, clamp, deepCopy } from '../shared/utils.js';
+import { log, clamp, deepCopy } from '../Shared/utils.js';
 
 describe('utils.js', () => {
     beforeEach(() => {
