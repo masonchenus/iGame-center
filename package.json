@@ -9,6 +9,7 @@
     "start": "node src/main.js",
     "dev": "webpack serve --mode development",
     "build": "webpack --mode production",
+    "postbuild": "cp src/core/index.html dist/index.html",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "npm run lint -- --fix",
     "prebuild": "npm run clean",
@@ -16,7 +17,13 @@
     "deploy": "npm run build && scp dist/* user@server:/var/www",
     "test:ci": "npm run check -- --coverage",
     "check": "npm run lint && npm test",
-    "npm format": "prettier --write 'src /*.{js,jsx,ts,tsx,html,json,css,scss,md,yml,xml,yaml,svg,graphql,mdx,test.js,test.jsx}"
+    "npm format": "prettier --write 'src /*.{js,jsx,ts,tsx,html,json,css,scss,md,yml,xml,yaml,svg,graphql,mdx,test.js,test.jsx}",
+    "clean": "rm -rf dist",
+    "prepublish": "npm run lint",
+    "start:prod": "node src/main.js",
+    "test:ci --silent": "npm test -- --coverage --silent --ci",
+    "build:prod": "npm run clean && npm run build -- --mode production",
+    "build:dev": "npm run clean && npm run build -- --mode development"
   },
   "dependencies": {
     "axios": "^1.13.2",

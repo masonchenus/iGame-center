@@ -1,0 +1,22 @@
+ai_backend/
+├── __init__.py
+├── orchestrator.py
+├── modules/
+│   ├── __init__.py
+│   ├── game_generator.py
+│   ├── math_solver.py
+│   ├── slides_generator.py
+│   ├── helper_module.py
+│   ├── agent_module.py
+│   ├── tester_module.py
+│   └── ...  # more modes up to 50+
+├── models/
+│   ├── chatgpt_model.py
+│   ├── perplexity_model.py
+│   ├── gemini_model.py
+│   ├── deepseek_model.py
+│   └── grok_model.py
+├── stats/
+│   └── stats.json
+└── billing/
+    └── billing.json
