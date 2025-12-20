@@ -1,4 +1,6 @@
 from ai_models import models
+PRIVILEGES = ["optimize_code", "suggest_optimizations"]
+
 
 def run(input_data="[<input_data>]", user_id="[<user_id>]", session_id="[<session_id>]", model_name="[<model_name>]"):
     """
