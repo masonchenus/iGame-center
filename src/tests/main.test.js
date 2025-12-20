@@ -82,7 +82,7 @@ describe('loadModeHTML', () => {
 
         expect(fetch).toHaveBeenCalledWith('./gamecenter.html');
         expect(mockLog).toHaveBeenCalledWith(`Error loading gamecenter: ${errorMessage}`, 'ERROR');
-        expect(document.body.innerHTML).toBe('<h1>Error</h1><p>Failed to load gamecenter. Please check the console for details.</p>');
+        expect(document.body.innerHTML).toBe(`<h1>Error</h1><p>Failed to load gamecenter. Please check the console for details.</p><code>${errorMessage}</code>`);
     });
 
     test('should handle network error', async () => {
@@ -95,7 +95,6 @@ describe('loadModeHTML', () => {
 
         expect(fetch).toHaveBeenCalledWith('./gamecenter.html');
         expect(mockLog).toHaveBeenCalledWith(`Error loading gamecenter: ${errorMessage}`, 'ERROR');
-        expect(document.body.innerHTML).toBe('<h1>Error</h1><p>Failed to load gamecenter. Please check the console for details.</p>');
+        expect(document.body.innerHTML).toBe(`<h1>Error</h1><p>Failed to load gamecenter. Please check the console for details.</p><code>${errorMessage}</code>`);
     });
 });
-

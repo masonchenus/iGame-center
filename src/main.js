@@ -28,7 +28,7 @@ export async function loadModeHTML(mode, settings, logFunction) {
     } catch (error) {
         logFunction(`Error loading ${mode}: ${error.message}`, "ERROR");
         // Fallback: display error message
-        document.body.innerHTML = `<h1>Error</h1><p>Failed to load ${mode}. Please check the console for details.</p>`;
+        document.body.innerHTML = `<h1>Error</h1><p>Failed to load ${mode}. Please check the console for details.</p><code>${error.message}</code>`;
     }
 }
 
