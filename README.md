@@ -1,19 +1,20 @@
-# Game Center Application
+# Multi repository
 
-This is the Game Center Application, a web-based app that supports game center and workshop modes.
+This is the Game Center Application, a web-based app that supports game center and workshop modes and also a AI.
 
 ## Features
 
 - Dynamic loading of HTML content for different modes (Game Center or Workshop).
 - Configuration via JSON settings.
 - Logging utilities for debugging.
+- 50 modes in the AI for 50 different purposes.
 
 ## Installation
 
 1. Clone the repository using the following terminal command:
    </br>
    `
-   git clone https://github.com/masonchenus/iGame-center.git
+   git clone https://github.com/masonchenus/Multi-purpose-repo.git
    `
 2. Run `npm install` to install dependencies.
 
