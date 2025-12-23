@@ -11,7 +11,7 @@
 
 **PLEASE DO NOT** report security vulnerabilities publicly. 
 
-If you discover a security vulnerability, please send an email to the project maintainers with:
+If you discover a security vulnerability, please send an email to the project maintainers (masonchenus@masonchenus or @masonchenus@gmail.com) with:
 
 1. **Description** of the vulnerability
 2. **Affected versions**
@@ -19,7 +19,7 @@ If you discover a security vulnerability, please send an email to the project ma
 4. **Potential impact**
 5. **Suggested fix** (if you have one)
 
-The maintainers will acknowledge your report within 48 hours and provide an estimated timeline for a fix.
+The maintainers will acknowledge your report within 96 hours and provide an estimated timeline for a fix.
 
 ## Security Best Practices
 
@@ -40,6 +40,7 @@ The maintainers will acknowledge your report within 48 hours and provide an esti
 - Keep dependencies updated: `npm audit fix`
 - Follow OWASP security guidelines
 - Test for XSS, CSRF, and injection vulnerabilities
+- Keep .gitignore promptly up-to-date.
 
 ## Security Headers
 

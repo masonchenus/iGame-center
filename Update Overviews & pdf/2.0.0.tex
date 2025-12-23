@@ -1,0 +1,60 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{hyperref}
+
+\title{iGame-center Overview}
+\author{Mason}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Purpose}
+iGame-center is a browser-based game platform that tracks player progress, scores, and achievements. It provides a centralized hub for players to play games, view stats, and compete globally.
+
+\section*{Core Components}
+\begin{itemize}
+    \item \textbf{index.html} -- Main game interface where players play the game.
+    \item \textbf{scoreboard.html} -- Displays global scores and player rankings.
+    \item \textbf{gamercard.html} -- Shows detailed player stats and achievements.
+    \item \textbf{src/core/} -- Contains all frontend code (HTML, JS, CSS) that runs in the browser.
+\end{itemize}
+
+\section*{Backend / Data Handling}
+\begin{itemize}
+    \item \textbf{GraphQL API} (via server.js and graphql/) handles storing and querying scores and achievements. It allows the frontend to retrieve exactly the data it needs.
+    \item \textbf{In-memory storage} (currently in graphql/data.js) temporarily stores scores and achievements; can be upgraded to a database later.
+\end{itemize}
+
+\section*{Features}
+\begin{itemize}
+    \item Global Score Tracking -- Players' scores are tracked and displayed on a leaderboard.
+    \item Gamercard System -- Personalized player stats.
+    \item Achievements -- Planned for future updates (2.1+).
+    \item Update Logging -- Optional documentation using \texttt{.tex} files for changelogs.
+\end{itemize}
+
+\section*{Technology Stack}
+\begin{itemize}
+    \item Frontend: HTML, JavaScript
+    \item Backend: Node.js + Apollo Server
+    \item API: GraphQL
+    \item Storage: In-memory JS arrays (future: database)
+    \item Optional: TeX (\texttt{.tex} files) for update overviews or documentation
+\end{itemize}
+
+\section*{Workflow Overview}
+\begin{enumerate}
+    \item Player plays game on \textbf{index.html}.
+    \item Score is sent via GraphQL mutation to backend.
+    \item Backend stores the score.
+    \item \textbf{scoreboard.html} queries backend via GraphQL to show updated leaderboard.
+    \item Gamercard queries backend to display stats and achievements.
+    \item Updates can be documented in \texttt{.tex} files for professional changelogs.
+\end{enumerate}
+
+\end{document}
+\end

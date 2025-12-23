@@ -75,3 +75,4 @@ temp/
 # Other
 *.venv/
 server.log
+__pycache__/

@@ -27,157 +27,23 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v6.1.0
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v5.1.0
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: "."
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-<<<<<<< HEAD
-=======
-  uses: actions/setup-node@v6.1.0
-  with:
-    # Version Spec of the version to use. Examples: 12.x, 10.15.1, >=10.15.0.
-    node-version: # optional
-    # File containing the version Spec of the version to use.  Examples: package.json, .nvmrc, .node-version, .tool-versions.
-    node-version-file: # optional
-    # Target architecture for Node to use. Examples: x86, x64. Will use system architecture by default.
-    architecture: # optional
-    # Optional registry to set up for auth. Will set the registry in a project level .npmrc and .yarnrc file, and set up auth to read in from env.NODE_AUTH_TOKEN.
-    registry-url: # optional
-    # Optional scope for authenticating against scoped registries. Will fall back to the repository owner when using the GitHub Packages registry (https://npm.pkg.github.com/).
-    scope: # optional
-    # Used to pull node distributions from node-versions. Since there's a default, this is typically not supplied by the user. When running this action on github.com, the default value is sufficient. When running on GHES, you can pass a personal access token for github.com if you are experiencing rate limiting.
-    token: # optional, default is ${{ github.server_url == 'https://github.com' && github.token || '' }}
-    # Used to specify a package manager for caching in the default directory. Supported values: npm, yarn, pnpm.
-    cache: # optional
-    # Set to false to disable automatic caching. By default, caching is enabled when either devEngines.packageManager or the top-level packageManager field in package.json specifies npm as the package manager.
-    package-manager-cache: # optional, default is true
-    # Used to specify the path to a dependency file: package-lock.json, yarn.lock, etc. Supports wildcards or a list of file names for caching multiple dependencies.
-    cache-dependency-path: # optional
-    # Used to specify an alternative mirror to downlooad Node.js binaries from
-    mirror: # optional
-    # The token used as Authorization header when fetching from the mirror
-    mirror-token: # optional
-                      - name: Upload a Build Artifact
-  uses: actions/upload-artifact@v5.0.0
-  with:
-    # Artifact name
-    name: # optional, default is artifact
-    # A file, directory or wildcard pattern that describes what to upload
-    path: 
-    # The desired behavior if no files are found using the provided path.
-Available Options:
-  warn: Output a warning but do not fail the action
-  error: Fail the action with an error message
-  ignore: Do not output any warnings or errors, the action does not fail
-    # Duration after which artifact will expire in days. 0 means using default retention.
-    # Minimum 1 day. Maximum 90 days unless changed from the repository settings page.
-  retention-days: # optional
-    # The level of compression for Zlib to be applied to the artifact archive. The value can range from 0 to 9: - 0: No compression - 1: Best speed - 6: Default compression (same as GNU Gzip) - 9: Best compression Higher levels will result in better compression, but will take longer to complete. For large files that are not easily compressed, a value of 0 is recommended for significantly faster uploads.
-
-    compression-level: 9
-    # If true, an artifact with a matching name will be deleted before a new one is uploaded. If false, the action will fail if an artifact for the given name already exists. Does not fail if the artifact does not exist.
-
-    overwrite: false
-    # If true, hidden files will be included in the artifact. If false, hidden files will be excluded from the artifact.
-
-    include-hidden-files: true
-                      - name: First interaction
-  uses: actions/first-interaction@v1.3.0
-  with:
-    # Token for the repository. Can be passed in using {{ secrets.GITHUB_TOKEN }}
-    repo-token: 
-    # Comment to post on an individual's first issue
-    issue-message: # optional
-    # Comment to post on an individual's first pull request
-    pr-message: # optional
-                      - name: Close Stale Issues
-  uses: actions/stale@v10.1.1
-  with:
-    name: Deploy static content to Pages
-
-    on:
-      push:
-        branches: ["main"]
-      workflow_dispatch:
-
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-
-    concurrency:
-      group: "pages"
-      cancel-in-progress: false
-
-    jobs:
-      deploy:
-        runs-on: ubuntu-latest
-        environment:
-          name: github-pages
-          url: ${{ steps.deployment.outputs.page_url }}
-        steps:
-          - name: Checkout
-            uses: actions/checkout@v4
-
-          - name: Setup Pages
-            uses: actions/configure-pages@v5
-
-          - name: Upload artifact
-            uses: actions/upload-pages-artifact@v3
-            with:
-              path: '.'
-
-          - name: Deploy to GitHub Pages
-            id: deployment
-            uses: actions/deploy-pages@v4
-    # The milestones that mean an issue is exempt from being marked as stale. Separate multiple milestones with commas (eg. "milestone1,milestone2"). Override "exempt-milestones" option regarding only the issue.
-    
-                - name: Setup Java JDK
-  uses: actions/setup-java@v5.1.0
-  with:
-    # The Java version to set up. Takes a whole or semver Java version. See examples of supported syntax in README file
-    java-version: # optional
-    # The path to the `.java-version` file. See examples of supported syntax in README file
-    java-version-file: # optional
-    # Java distribution. See the list of supported distributions in README file
-    distribution: 
-    # The package type (jdk, jre, jdk+fx, jre+fx)
-    java-package: # optional, default is jdk
-    # The architecture of the package (defaults to the action runner's architecture)
-    architecture: # optional
-    # Path to where the compressed JDK is located
-    jdkFile: # optional
-    # Set this option if you want the action to check for the latest available version that satisfies the version spec
-    check-latest: # optional
-    # ID of the distributionManagement repository in the pom.xml file. Default is `github`
-    server-id: # optional, default is github
-    # Environment variable name for the username for authentication to the Apache Maven repository. Default is $GITHUB_ACTOR
-    server-username: # optional, default is GITHUB_ACTOR
-    # Environment variable name for password or token for authentication to the Apache Maven repository. Default is $GITHUB_TOKEN
-    server-password: # optional, default is GITHUB_TOKEN
-    # Path to where the settings.xml file will be written. Default is ~/.m2.
-    settings-path: # optional
-    # Overwrite the settings.xml file if it exists. Default is "true".
-    overwrite-settings: # optional, default is true
-    # GPG private key to import. Default is empty string.
-    gpg-private-key: # optional
-    # Environment variable name for the GPG private key passphrase. Default is $GPG_PASSPHRASE.
-    gpg-passphrase: # optional
-    # Name of the build platform to cache dependencies. It can be "maven", "gradle" or "sbt".
-    cache: # optional
-    # The path to a dependency file: pom.xml, build.gradle, build.sbt, etc. This option can be used with the `cache` option. If this option is omitted, the action searches for the dependency file in the entire repository. This option supports wildcards and a list of file names for caching multiple dependencies.
-    cache-dependency-path: # optional
-    # Workaround to pass job status to post job step. This variable is not intended for manual setting
-    job-status: # optional, default is ${{ job.status }}
-    # The token used to authenticate when fetching version manifests hosted on github.com, such as for the Microsoft Build of OpenJDK. When running this action on github.com, the default value is sufficient. When running on GHES, you can pass a personal access token for github.com if you are experiencing rate limiting.
-    token: # optional, default is ${{ github.server_url == 'https://github.com' && github.token || '' }}
-    # Name of Maven Toolchain ID if the default name of "${distribution}_${java-version}" is not wanted. See examples of supported syntax in Advanced Usage file
-    mvn-toolchain-id: # optional
-    # Name of Maven Toolchain Vendor if the default name of "${distribution}" is not wanted. See examples of supported syntax in Advanced Usage file
-    mvn-toolchain-vendor: # optional
-          
->>>>>>> f5edb530f13c983e07d8172f4cd943618daa1e17

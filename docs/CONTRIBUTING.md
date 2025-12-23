@@ -1,38 +1,44 @@
-# Contributing to Game Center
+# Contributing to Multi Purpose Repo
 
 Thank you for your interest in contributing to Game Center! This document outlines our guidelines and process for contributing.
 
 ## Code of Conduct
 
-Please be respectful and constructive in all interactions with other contributors.
+Please be respectful and constructive in all interactions with other contributors. Please use the bots responsibly.
 
 ## Getting Started
 
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/your-username/game-center.git
-   cd Game\ Center\ Project
+   git clone https://github.com/your-username/Multi-purpose-repo.git
+   cd Multi-purpose-repo
    ```
 3. **Install dependencies**:
    ```bash
    npm install
    ```
+   ``` zsh
+   pip install
+   ```
+   ``` zsh
+   pip3 install
+   ```
 4. **Create a feature branch**:
    ```bash
    git checkout -b feature/your-feature-name
    ```
-
+   You can create your new feature branch with a bot which can write PRs or manually.
 ## Development Process
 
-1. **Make your changes** following the code style guidelines
+1. **Make your changes following the code style guidelines** 
 2. **Test your changes**:
    ```bash
    npm test
    ```
 3. **Commit with clear messages**:
    ```bash
-   git commit -m "feat: add new chaos weapon effects"
+   git commit -m "<Commit message here>"
    ```
 4. **Push to your fork**:
    ```bash
@@ -47,10 +53,13 @@ Please be respectful and constructive in all interactions with other contributor
 - **CSS**: Use 2-space indentation
 - **Comments**: Use meaningful comments to explain complex logic
 - **No commented code**: Remove debug code before submitting
+- **File tree organization**: Please organize files correctly. It is okay if there are 1 or 2 mistakes but if there are over 10 mistakes then fix it.
 
 ### EditorConfig
 
 This project uses EditorConfig. Please install the EditorConfig plugin for your editor to maintain consistent style.
+This project also uses eslint. Please install eslint too. 
+This project also uses prettier. Please install prettier too.
 
 ## Commit Messages
 
@@ -63,7 +72,7 @@ body (optional)
 ```
 
 **Types**: feat, fix, docs, style, refactor, perf, test, chore
-**Example**: `feat(weapons): add chaos bullet rendering`
+**Example**: `feat(weapons): add chaos bullet rendering` ( ** That is a PR that is merged created by jules.** )
 
 ## Testing
 
@@ -76,10 +85,11 @@ body (optional)
 - Update README.md if adding new features
 - Add JSDoc comments for new functions
 - Update API documentation if relevant
+- If you need to change docs/ then change it if absolutely needed.
 
 ## Pull Request Guidelines
 
-1. **Title**: Clear and descriptive
+1. **Title**: Clear and descriptive with no swear words.
 2. **Description**: Explain what changes were made and why
 3. **Testing**: Describe how you tested the changes
 4. **Screenshots**: Include screenshots for UI changes
@@ -103,6 +113,7 @@ Feature requests are welcome! Include:
 - Clear description of the feature
 - Why you think it would be useful
 - Possible implementation approach (optional)
+- Request the feature in feature-requests.txt.
 
 ## Performance Considerations
 

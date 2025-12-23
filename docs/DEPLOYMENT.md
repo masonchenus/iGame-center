@@ -1,4 +1,4 @@
-# Deployment Guide
+# Deployment Guide for Devs
 
 This guide covers deploying Game Center to various platforms.
 

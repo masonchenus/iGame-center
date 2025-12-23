@@ -1,6 +1,6 @@
 # Developer Guide
 
-This guide provides information for developers working on the Game Center Application.
+This guide provides information for developers & new contributors working on the Game Center Application.
 
 ## Project Overview
 
