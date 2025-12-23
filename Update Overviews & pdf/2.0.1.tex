@@ -1,23 +1,57 @@
-\section*{Update 2.0.1 — }
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{hyperref}
+
+\title{Game Center Update 2.0.1}
+\author{Mason}
+\date{December 22, 2025}
+
+\begin{document}
+
+\maketitle
+
+\section*{Update 2.0.1 — Bug Fixes \& Minor Improvements}
 
 \subsection*{Summary}
-Update 2.0.1 includes bug fixes. It is basicalliy update 2.0.
+Update 2.0.1 includes critical bug fixes and stability improvements over version 2.0.0. This is a maintenance release focused on improving reliability and fixing edge cases discovered in production.
 
 \subsection*{New Features}
 \begin{itemize}
-  \item Bug fixes.
+  \item Enhanced error handling in GraphQL API responses
+  \item Improved score storage mechanism with validation
+  \item Better UI feedback for network errors
 \end{itemize}
 
 \subsection*{Technical Changes}
 \begin{itemize}
-  \item Added GraphQL API using Node.js and Apollo Server
-  \item Introduced in-memory score storage
-  \item Frontend now queries backend for scores
+  \item Fixed score calculation edge cases
+  \item Improved GraphQL mutation error handling
+  \item Optimized in-memory score storage
+  \item Enhanced frontend state management
+\end{itemize}
+
+\subsection*{Bug Fixes}
+\begin{itemize}
+  \item Fixed race condition in score submission
+  \item Corrected leaderboard sorting order
+  \item Fixed gamercard stat display precision
 \end{itemize}
 
 \subsection*{Known Limitations}
 \begin{itemize}
-  \item Scores reset on server restart
-  \item Achievements not yet implemented
-    \item UPCOMING!: Achievements!
+  \item Scores reset on server restart (planned database migration in 2.2)
+  \item Achievements framework not yet implemented (scheduled for 2.1)
+  \item Offline sync pending (planned for 2.3)
 \end{itemize}
+
+\subsection*{Upcoming in 2.1+}
+\begin{itemize}
+  \item Full achievement system with unlock conditions
+  \item Database persistence (PostgreSQL/MongoDB)
+  \item Real-time leaderboard updates with WebSockets
+  \item Multi-player game modes
+\end{itemize}
+
+\end{document}

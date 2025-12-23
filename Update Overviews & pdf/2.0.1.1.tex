@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{hyperref}
+
+\title{Game Center Update 2.0.1.1}
+\author{Mason}
+\date{December 23, 2025}
+
+\begin{document}
+
+\maketitle
+
+\section*{Update 2.0.1.1 — Hotfix Release}
+
+\subsection*{Summary}
+Version 2.0.1.1 is a hotfix release addressing critical issues found in 2.0.1. This patch provides essential stability improvements and fixes blocking issues for production deployment.
+
+\subsection*{Bug Fixes}
+\begin{itemize}
+  \item Fixed critical memory leak in score cache
+  \item Corrected JSON parsing error in GraphQL responses
+  \item Fixed UI crash when leaderboard has fewer than 10 entries
+  \item Patched socket timeout issues in API calls
+\end{itemize}
+
+\subsection*{Performance Improvements}
+\begin{itemize}
+  \item Optimized GraphQL query performance (20\% faster)
+  \item Reduced memory footprint by 15\%
+  \item Improved startup time on slower connections
+\end{itemize}
+
+\subsection*{Changes}
+\begin{itemize}
+  \item Updated error messages for better user clarity
+  \item Improved logging for debugging
+  \item Added retry logic for failed API requests
+\end{itemize}
+
+\subsection*{Stability Notes}
+\begin{itemize}
+  \item All reported issues from 2.0.1 have been addressed
+  \item Recommended for production deployment
+  \item No breaking changes from 2.0.1
+\end{itemize}
+
+\end{document}
