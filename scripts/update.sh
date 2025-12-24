@@ -2,7 +2,7 @@
 # update.sh - Pull latest changes and optionally restart service
 
 # Set project directory
-PROJECT_DIR="Game Center Project/"
+PROJECT_DIR="/Users/mason/Game Center Project/"
 
 # Change to project directory
 cd "$PROJECT_DIR" || { echo "Project directory not found!"; exit 1; }

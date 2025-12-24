@@ -8,4 +8,4 @@ fi
 
 ARCHIVE="$1"
 tar -xzf "$ARCHIVE"
-echo "Archive $ARCHIVE extracted"
+echo "✅ Archive $ARCHIVE extracted successfully."

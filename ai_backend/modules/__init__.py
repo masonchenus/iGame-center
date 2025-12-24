@@ -15,7 +15,7 @@ from . import (
 __all__ = [
 	'game_generator', 'math_solver', 'slides_generator', 'helper_module', 'agent_module',
 	'tester_module', 'codegen_module', 'explain_module', 'summarizer_module', 'story_module',
-	'dialogue_module', 'brainstorming_module', 'outline_module', 'quiz_module', 'trivia_module',
+	'brainstorming_module', 'outline_module', 'quiz_module', 'trivia_module',
 	'fact_check_module', 'translator_module', 'lyrics_module', 'poem_module', 'joke_module',
 	'cheat_sheet_module', 'code_review_module', 'optimization_module', 'design_module', 'diagram_module',
 	'debug_module', 'math_explain_module', 'data_analysis_module', 'recommendation_module', 'productivity_module',

@@ -76,3 +76,4 @@ temp/
 *.venv/
 server.log
 __pycache__/
+Docker/

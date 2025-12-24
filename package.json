@@ -8,7 +8,7 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "start": "node src/main.js",
     "dev": "webpack serve --mode development",
-    "build": "webpack --mode production",
+    "build": "webpack --mode production && ./scripts/build.sh",
     "postbuild": "cp src/core/index.html dist/index.html",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "npm run lint -- --fix",
@@ -23,11 +23,13 @@
     "start:prod": "node src/main.js",
     "test:ci --silent": "npm test -- --coverage --silent --ci",
     "build:prod": "npm run clean && npm run build -- --mode production",
-    "build:dev": "npm run clean && npm run build -- --mode development"
+    "build:dev": "npm run clean && npm run build -- --mode development",
+    "serve": "./scripts/serve.sh"
   },
   "dependencies": {
     "axios": "^1.13.2",
     "day": "^0.0.2",
+    "docker-compose": "^1.3.0",
     "express.js": "^1.0.0",
     "fastify": "^5.6.2",
     "flow": "^0.2.3",

@@ -1,0 +1,176 @@
+{
+  "timestamp": "2025-12-24T08:35:32.273747",
+  "system_info": {
+    "initial_metrics": {
+      "cpu_time_user": 0.054866,
+      "cpu_time_system": 0.010494,
+      "memory_usage_kb": 26361856,
+      "load_average": [
+        6.4814453125,
+        5.29150390625,
+        4.84033203125
+      ],
+      "process_count": 100
+    },
+    "final_metrics": {
+      "cpu_time_user": 0.055438999999999995,
+      "cpu_time_system": 0.010714999999999999,
+      "memory_usage_kb": 26361856,
+      "load_average": [
+        6.4814453125,
+        5.29150390625,
+        4.84033203125
+      ],
+      "process_count": 100
+    }
+  },
+  "ai_results": [
+    {
+      "x": 7.075560453132624,
+      "w_sample": [
+        5.97,
+        9.83,
+        9.0,
+        4.25,
+        7.17
+      ],
+      "b_sample": [
+        2.84,
+        2.56,
+        3.97,
+        0.23,
+        9.51
+      ],
+      "y_values": [
+        45.081095905201764,
+        72.11275925429369,
+        67.65004407819362,
+        30.301131925813653,
+        60.24176844896091
+      ],
+      "processing_time_ms": 0.026226043701171875,
+      "response": "AI processing complete for: Explain AI fundamentals..."
+    },
+    {
+      "x": 7.150438532035435,
+      "w_sample": [
+        9.75,
+        3.7,
+        2.03,
+        8.74,
+        7.7
+      ],
+      "b_sample": [
+        3.63,
+        7.36,
+        9.28,
+        8.36,
+        4.22
+      ],
+      "y_values": [
+        73.34677568734548,
+        33.81662256853111,
+        23.79539022003193,
+        70.8548327699897,
+        59.278376696672844
+      ],
+      "processing_time_ms": 0.15401840209960938,
+      "response": "AI processing complete for: How does y = w*x + b work?..."
+    },
+    {
+      "x": 4.384374803487299,
+      "w_sample": [
+        5.51,
+        2.58,
+        3.98,
+        5.68,
+        7.71
+      ],
+      "b_sample": [
+        1.15,
+        1.64,
+        9.09,
+        8.89,
+        8.14
+      ],
+      "y_values": [
+        25.307905167215015,
+        12.951686992997233,
+        26.53981171787945,
+        33.79324888380786,
+        41.94352973488708
+      ],
+      "processing_time_ms": 0.10085105895996094,
+      "response": "AI processing complete for: Machine learning basics..."
+    },
+    {
+      "x": 9.932332769951861,
+      "w_sample": [
+        2.67,
+        9.77,
+        4.45,
+        2.48,
+        7.02
+      ],
+      "b_sample": [
+        5.03,
+        1.72,
+        6.79,
+        0.13,
+        9.54
+      ],
+      "y_values": [
+        31.54932849577147,
+        98.75889116242968,
+        50.98888082628578,
+        24.762185269480614,
+        79.26497604506207
+      ],
+      "processing_time_ms": 0.03719329833984375,
+      "response": "AI processing complete for: Neural network concepts..."
+    },
+    {
+      "x": 5.6536456257229775,
+      "w_sample": [
+        4.54,
+        9.8,
+        1.83,
+        2.09,
+        4.3
+      ],
+      "b_sample": [
+        5.82,
+        6.38,
+        2.74,
+        8.88,
+        4.59
+      ],
+      "y_values": [
+        31.48755114078232,
+        61.785727132085185,
+        13.08617149507305,
+        20.69611935776102,
+        28.900676190608802
+      ],
+      "processing_time_ms": 0.027894973754882812,
+      "response": "AI processing complete for: Performance optimization techn..."
+    }
+  ],
+  "performance_summary": {
+    "avg_processing_time_ms": 0.07476806640625,
+    "total_processing_time_ms": 0.37384033203125,
+    "memory_growth_mb": 0.0,
+    "cpu_utilization_percent": 3.744742678787576e-09,
+    "load_average": [
+      6.4814453125,
+      5.29150390625,
+      4.84033203125
+    ],
+    "total_requests": 5
+  },
+  "recommendations": [
+    "\ud83d\udfe2 CPU usage is optimal",
+    "\ud83d\udfe2 Memory usage is optimal",
+    "\ud83d\udfe2 Processing time is optimal"
+  ]
+}

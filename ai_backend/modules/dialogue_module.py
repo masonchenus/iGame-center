@@ -1,4 +1,4 @@
-from ai_models import models
+from ai_backend import models
 PRIVILEGES = ["simulate_dialogue"]
 
 

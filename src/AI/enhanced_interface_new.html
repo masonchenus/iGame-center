@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced AI Interface - Game Center</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            font-family: Arial, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 280px 1fr 300px;
+            height: 100vh;
+            gap: 0;
+        }
+
+        /* Left Sidebar - Chat History */
+        .left-sidebar {
+            background: rgba(0, 0, 0, 0.4);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar-header {
+            margin-bottom: 20px;
+        }
+
+        .sidebar-title {
+            color: #4ecdc4;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .new-chat-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .new-chat-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-search {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .chat-history-list {
+            list-style: none;
+        }
+
+        .chat-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .chat-item.active {
+            background: rgba(78, 205, 196, 0.2);
+            border-color: #4ecdc4;
+        }
+
+        .chat-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        .chat-time {
+            font-size: 0.8em;
+            color: #ccc;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .formula-display {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 1em;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: inline-block;
+        }
+
+        .status-indicators {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .status-indicator {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .status-good {
+            background: #27ae60;
+            color: white;
+        }
+
+        .status-warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .status-error {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .status-info {
+            background: #3498db;
+            color: white;
+        }
+
+        /* Chat Interface */
+        .chat-interface {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 20px;
+            overflow: hidden;
+        }
+
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .message {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            animation: fadeIn 0.3s ease;
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin-left: 20%;
+            text-align: right;
+        }
+
+        .message.ai {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            margin-right: 20%;
+            text-align: left;
+        }
+
+        .message-content {
+            font-size: 1em;
+            word-wrap: break-word;
+        }
+
+        .message-time {
+            font-size: 0.75em;
+            opacity: 0.8;
+            margin-top: 8px;
+        }
+
+        /* Input Area */
+        .input-section {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .input-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .prompt-input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            color: #fff;
+            font-size: 14px;
+            resize: none;
+            min-height: 60px;
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+        }
+
+        .input-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .send-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .settings-btn {
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .settings-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Performance Metrics */
+        .metrics-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .metrics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .metrics-title {
+            color: #4ecdc4;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .show-all-btn {
+            padding: 8px 15px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .show-all-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .metric-value {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            color: #ccc;
+            font-size: 0.85em;
+        }
+
+        /* Right Sidebar - Module Selection */
+        .right-sidebar {
+            background: rgba(0, 0, 0, 0.4);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .module-search {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .module-categories {
+            margin-bottom: 20px;
+        }
+
+        .category-btn {
+            width: 100%;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: rgba(78, 205, 196, 0.2);
+            color: #4ecdc4;
+            border-color: #4ecdc4;
+        }
+
+        .module-list {
+            list-style: none;
+        }
+
+        .module-item {
+            padding: 10px 12px;
+            margin-bottom: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .module-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(-3px);
+        }
+
+        .module-item.selected {
+            background: rgba(78, 205, 196, 0.2);
+            border-color: #4ecdc4;
+        }
+
+        .module-name {
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 3px;
+            font-size: 0.9em;
+        }
+
+        .module-desc {
+            font-size: 0.75em;
+            color: #aaa;
+        }
+
+        /* Loading and Notifications */
+        .loading {
+            display: none;
+            text-align: center;
+            color: #4ecdc4;
+            margin: 15px 0;
+        }
+
+        .spinner {
+            border: 3px solid rgba(78, 205, 196, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #4ecdc4;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification-success {
+            background: #27ae60;
+        }
+
+        .notification-error {
+            background: #e74c3c;
+        }
+
+        .notification-warning {
+            background: #f39c12;
+        }
+
+        .notification-info {
+            background: #3498db;
+        }
+
+        /* Settings Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: rgba(26, 26, 46, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            color: #4ecdc4;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .setting-group {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .setting-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .setting-checkbox {
+            transform: scale(1.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 250px 1fr 250px;
+            }
+        }
+
+        @media (max-width: 968px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .left-sidebar,
+            .right-sidebar {
+                display: none;
+            }
+
+            .left-sidebar.mobile-open,
+            .right-sidebar.mobile-open {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 999;
+                padding: 20px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <!-- Left Sidebar - Chat History -->
+        <div class="left-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">💬 Chat History</div>
+                <button class="new-chat-btn" id="newChatBtn">+ New Chat</button>
+                <input type="text" class="chat-search" id="chatSearch" placeholder="Search chats...">
+            </div>
+            <ul class="chat-history-list" id="chatHistoryList">
+                <!-- Chat history items will be populated here -->
+            </ul>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="header">
+                <h1>🧠 Enhanced AI System</h1>
+                <p>Advanced AI with Mathematical Foundation: <span class="formula-display">y = w × x + b</span></p>
+
+                <div class="status-indicators">
+                    <div class="status-indicator status-good" id="connectionStatus">Connected</div>
+                    <div class="status-indicator status-info" id="modelStatus">Nexus Model</div>
+                    <div class="status-indicator status-good" id="parameterStatus">Parameters Active</div>
+                    <div class="status-indicator status-info" id="monitoringStatus">Monitoring</div>
+                </div>
+            </div>
+
+            <div class="chat-interface">
+                <div class="chat-container" id="chatContainer">
+                    <div class="message ai">
+                        <div class="message-content">
+                            <strong>AI System:</strong> Welcome to the Enhanced AI Interface! I can process your
+                            requests using advanced parameter optimization. How can I help you today?
+                        </div>
+                        <div class="message-time">Just now</div>
+                    </div>
+                </div>
+
+                <div class="input-section">
+                    <div class="input-container">
+                        <textarea id="promptInput" class="prompt-input"
+                            placeholder="Ask me anything... (Press Enter to send, Shift+Enter for new line)"></textarea>
+                        <div class="input-controls">
+                            <button class="settings-btn" id="settingsBtn">⚙️ Settings</button>
+                            <button id="sendBtn" class="send-btn">Send</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="loading" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <div>Processing with AI parameters...</div>
+                </div>
+
+                <div class="metrics-panel">
+                    <div class="metrics-header">
+                        <div class="metrics-title">📈 Real-time Performance Metrics</div>
+                        <button class="show-all-btn" id="showAllMetricsBtn">Show All 500+</button>
+                    </div>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-value" id="cpuUsage">--</div>
+                            <div class="metric-label">CPU Usage (%)</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="memoryUsage">--</div>
+                            <div class="metric-label">Memory Usage (MB)</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="responseTime">--</div>
+                            <div class="metric-label">Response Time (ms)</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="requestsPerMin">--</div>
+                            <div class="metric-label">Requests/Min</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="errorRate">--</div>
+                            <div class="metric-label">Error Rate (%)</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="modelAccuracy">--</div>
+                            <div class="metric-label">Model Accuracy</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar - Module Selection -->
+        <div class="right-sidebar">
+            <div class="sidebar-title">🔧 AI Modules</div>
+            <input type="text" class="module-search" id="moduleSearch" placeholder="Search modules...">
+
+            <div class="module-categories">
+                <button class="category-btn active" data-category="all">All Modules</button>
+                <button class="category-btn" data-category="development">Development</button>
+                <button class="category-btn" data-category="analysis">Analysis</button>
+                <button class="category-btn" data-category="creativity">Creativity</button>
+                <button class="category-btn" data-category="productivity">Productivity</button>
+                <button class="category-btn" data-category="entertainment">Entertainment</button>
+                <button class="category-btn" data-category="communication">Communication</button>
+                <button class="category-btn" data-category="testing">🚨 Testing</button>
+            </div>
+
+            <ul class="module-list" id="moduleList">
+                <!-- Module items will be populated here -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Chat Settings</div>
+                <button class="close-btn" id="closeSettingsBtn">&times;</button>
+            </div>
+
+            <div class="setting-group">
+                <div class="setting-label">
+                    <input type="checkbox" class="setting-checkbox" id="showAllMetricsChat">
+                    <span>Show all 500+ metrics during chat</span>
+                </div>
+                <small style="color: #ccc;">Display comprehensive performance metrics in the chat interface</small>
+            </div>
+
+            <div class="setting-group">
+                <div class="setting-label">
+                    <input type="checkbox" class="setting-checkbox" id="autoSaveChats">
+                    <span>Auto-save chat history</span>
+                </div>
+                <small style="color: #ccc;">Automatically save conversations to local storage</small>
+            </div>
+
+            <div class="setting-group">
+                <div class="setting-label">
+                    <input type="checkbox" class="setting-checkbox" id="soundNotifications">
+                    <span>Sound notifications</span>
+                </div>
+                <small style="color: #ccc;">Play notification sounds for new messages</small>
+            </div>
+        </div>
+    </div>
+
+    <script src="enhanced_interface_new.js"></script>
+</body>
+
+</html>

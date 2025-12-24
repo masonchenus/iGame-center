@@ -6,7 +6,7 @@ import hashlib
 import os
 import json
 
-# Import all 50 modules
+# Import all 50+ modules including new multilingual AI modules
 from ai_backend.modules import (
     game_generator, math_solver, slides_generator, helper_module, agent_module,
     tester_module, codegen_module, explain_module, summarizer_module, story_module,
@@ -17,7 +17,9 @@ from ai_backend.modules import (
     health_module, research_module, coding_challenge_module, game_tips_module, ranking_module,
     simulation_module, test_creator_module, logic_puzzle_module, riddle_module, comparison_module,
     planning_module, checklist_module, prompt_idea_module, generator_module, naming_module,
-    stats_analyzer_module, visualization_module, feedback_module, creativity_module, documentation_module
+    stats_analyzer_module, visualization_module, feedback_module, creativity_module, documentation_module,
+    # New multilingual AI modules
+    python_ml_module, javascript_ts_module, go_module, rust_module, java_module
 )
  
 
@@ -27,7 +29,7 @@ from ai_backend import models
 # ------------------------
 # Paths for stats and billing
 # ------------------------
-STATS_FILE = "stats/stats.json"
+STATS_FILE = "ai_stats/stats.json"
 BILLING_FILE = "billing/billing.json"
 
 # ------------------------
@@ -62,7 +64,7 @@ class BaseAI:
         self.stats = load_json(STATS_FILE)
         self.billing = load_json(BILLING_FILE)
 
-        # Map mode names to module functions
+        # Map mode names to module functions (50+ modules including new multilingual AI)
         self.modes = {
             "game": game_generator.game,
             "math": math_solver.math,
@@ -113,7 +115,13 @@ class BaseAI:
             "visualization": visualization_module.visualization,
             "feedback": feedback_module.feedback,
             "creativity": creativity_module.creativity,
-            "documentation": documentation_module.documentation
+            "documentation": documentation_module.documentation,
+            # New multilingual AI modules
+            "python-ml": python_ml_module.python_ml_response,
+            "javascript-ts": javascript_ts_module.javascript_response,
+            "go": go_module.go_response,
+            "rust": rust_module.rust_response,
+            "java": java_module.java_response
         }
 
         # Create a memory-safe virtual array that *appears* to have 148 trillion elements.
@@ -241,4 +249,3 @@ def run_mode(mode_name=None, model_name="chatgpt", input_data="", user_id="web",
         }
 
     return json.dumps(result)
-

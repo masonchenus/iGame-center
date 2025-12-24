@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced AI Interface - y = w×x + b</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .formula-display {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .panel h2 {
+            color: #4ecdc4;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin-left: 20%;
+            text-align: right;
+        }
+
+        .message.ai {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            margin-right: 20%;
+            text-align: left;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .prompt-input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            color: #fff;
+            font-size: 14px;
+            resize: none;
+            min-height: 45px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .parameter-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-group h3 {
+            color: #ff6b6b;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .slider-container {
+            margin: 15px 0;
+        }
+
+        .slider-container label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ccc;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #333;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4ecdc4;
+            cursor: pointer;
+        }
+
+        .value-display {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #4ecdc4;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .metrics-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            color: #ccc;
+            font-size: 0.9em;
+        }
+
+        .status-indicators {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .status-indicator {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .status-good {
+            background: #27ae60;
+            color: white;
+        }
+
+        .status-warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .status-error {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .status-info {
+            background: #3498db;
+            color: white;
+        }
+
+        .model-selector {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 5px 12px;
+            color: white;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .model-selector:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .model-selector.available {
+            border-color: #27ae60;
+        }
+
+        .model-selector.unavailable {
+            border-color: #e74c3c;
+            opacity: 0.6;
+        }
+
+        .model-dropdown {
+            position: absolute;
+            background: rgba(26, 26, 46, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            min-width: 200px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .model-option {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .model-option:hover {
+            background: rgba(78, 205, 196, 0.2);
+        }
+
+        .model-option:last-child {
+            border-bottom: none;
+        }
+
+        .model-option.current {
+            background: rgba(78, 205, 196, 0.3);
+        }
+
+        .model-option.unavailable {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .model-name {
+            font-weight: bold;
+        }
+
+        .model-status {
+            font-size: 0.7em;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .model-status.available {
+            background: #27ae60;
+            color: white;
+        }
+
+        .model-status.unavailable {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #4ecdc4;
+            margin: 10px 0;
+        }
+
+        .spinner {
+            border: 3px solid rgba(78, 205, 196, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #4ecdc4;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        .debug-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .debug-content {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #aaa;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .parameter-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Enhanced AI System</h1>
+            <p>Advanced AI with Mathematical Foundation: <span class="formula-display">y = w × x + b</span></p>
+        </div>
+
+        <div class="status-indicators">
+            <div class="status-indicator status-good" id="connectionStatus">Connected</div>
+            <div class="status-indicator status-info" id="modelStatus">Nexus Model</div>
+            <div class="status-indicator status-good" id="parameterStatus">Parameters Active</div>
+            <div class="status-indicator status-info" id="monitoringStatus">Monitoring</div>
+
+            <!-- Model Selector -->
+            <div class="model-selector available" id="modelSelector">
+                <span id="currentModelDisplay">Nexus AI</span>
+                <span style="margin-left: 5px;">▼</span>
+                <div class="model-dropdown" id="modelDropdown">
+                    <!-- Model options will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <!-- AI Chat Interface -->
+            <div class="panel">
+                <h2>💬 AI Chat Interface</h2>
+
+                <div class="chat-container" id="chatHistory">
+                    <div class="message ai">
+                        <strong>AI System:</strong> Welcome to the Enhanced AI Interface! I can process your requests
+                        using advanced parameter optimization. How can I help you today?
+                    </div>
+                </div>
+
+                <div class="input-container">
+                    <textarea id="promptInput" class="prompt-input"
+                        placeholder="Ask me anything... (Press Enter to send)"></textarea>
+                    <button id="sendBtn" class="btn">Send</button>
+                </div>
+
+                <div class="loading" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <div>Processing with AI parameters...</div>
+                </div>
+            </div>
+
+            <!-- Parameter Controls -->
+            <div class="panel">
+                <h2>⚙️ Parameter Controls</h2>
+
+                <div class="parameter-controls">
+                    <div class="control-group">
+                        <h3>🔧 W Parameters</h3>
+
+                        <div class="slider-container">
+                            <label for="wLearningRate">Learning Rate</label>
+                            <input type="range" id="wLearningRate" class="slider" min="0.0001" max="0.1" step="0.0001"
+                                value="0.001">
+                            <div class="value-display" id="wLearningRateValue">0.001</div>
+                        </div>
+
+                        <div class="slider-container">
+                            <label for="wRegularization">Regularization</label>
+                            <input type="range" id="wRegularization" class="slider" min="0.001" max="0.1" step="0.001"
+                                value="0.01">
+                            <div class="value-display" id="wRegularizationValue">0.01</div>
+                        </div>
+
+                        <div class="slider-container">
+                            <label for="wSize">Active Parameters</label>
+                            <input type="range" id="wSize" class="slider" min="1000" max="50000" step="1000"
+                                value="10000">
+                            <div class="value-display" id="wSizeValue">10,000</div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <h3>📊 B Parameters</h3>
+
+                        <div class="slider-container">
+                            <label for="bLearningRate">Learning Rate</label>
+                            <input type="range" id="bLearningRate" class="slider" min="0.0001" max="0.1" step="0.0001"
+                                value="0.001">
+                            <div class="value-display" id="bLearningRateValue">0.001</div>
+                        </div>
+
+                        <div class="slider-container">
+                            <label for="bRegularization">Regularization</label>
+                            <input type="range" id="bRegularization" class="slider" min="0.001" max="0.1" step="0.001"
+                                value="0.01">
+                            <div class="value-display" id="bRegularizationValue">0.01</div>
+                        </div>
+
+                        <div class="slider-container">
+                            <label for="bSize">Active Parameters</label>
+                            <input type="range" id="bSize" class="slider" min="1000" max="50000" step="1000"
+                                value="10000">
+                            <div class="value-display" id="bSizeValue">10,000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="updateParameters" class="btn">Update Parameters</button>
+            </div>
+        </div>
+
+        <!-- Performance Metrics -->
+        <div class="panel full-width">
+            <h2>📈 Real-time Performance Metrics</h2>
+
+            <div class="metrics-panel">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value" id="cpuUsage">--</div>
+                        <div class="metric-label">CPU Usage (%)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="memoryUsage">--</div>
+                        <div class="metric-label">Memory Usage (MB)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="responseTime">--</div>
+                        <div class="metric-label">Response Time (ms)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="requestsPerMin">--</div>
+                        <div class="metric-label">Requests/Min</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="errorRate">--</div>
+                        <div class="metric-label">Error Rate (%)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="modelAccuracy">--</div>
+                        <div class="metric-label">Model Accuracy</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Debug Information -->
+            <div class="debug-panel">
+                <h3 style="color: #ff6b6b; margin-bottom: 10px;">🧠 Mathematical Processing Details</h3>
+                <div class="debug-content" id="debugContent">
+                    <div>W Array Size: 148,000,000,000,000 elements</div>
+                    <div>B Array Size: 148,000,000,000,000 elements</div>
+                    <div>Formula: y = w × x + b</div>
+                    <div>Status: Ready for input...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="enhanced_interface_stable.js"></script>
+</body>
+
+</html>

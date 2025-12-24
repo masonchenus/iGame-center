@@ -1,0 +1,14 @@
+type Achievement {
+  id: ID!
+  player: String!
+  title: String!
+  description: String!
+}
+
+type Query {
+  allAchievements: [Achievement!]!
+}
+
+type Mutation {
+  addAchievement(player: String!, title: String!, description: String!): Achievement!
+}
