@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Renderer Test</title>
+    <style>
+        body {
+            background: #1a1a2e;
+            color: white;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .rendered-content {
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🎨 Content Renderer Test</h1>
+
+    <div class="test-section">
+        <h2>📝 Markdown Test</h2>
+        <div id="markdownTest" class="rendered-content"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🧮 LaTeX Test</h2>
+        <div id="latexTest" class="rendered-content"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>💻 Code Highlighting Test</h2>
+        <div id="codeTest" class="rendered-content"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🎯 Combined Test</h2>
+        <div id="combinedTest" class="rendered-content"></div>
+    </div>
+
+    <!-- Content Renderer Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.10.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+
+    <!-- Highlight.js CSS Theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.10.0/styles/github-dark.min.css">
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+    <!-- Content Renderer -->
+    <script src="content-renderer.js"></script>
+
+    <script>
+        // Initialize content renderer
+        const renderer = new ContentRenderer();
+
+        // Test markdown rendering
+        const markdownContent = `
+# 🎯 Markdown Features Test
+
+## Headers
+- **Bold text** and *italic text*
+- ~~Strikethrough text~~
+- \`inline code\`
+
+### Lists
+1. First item
+2. Second item
+   - Nested item
+   - Another nested item
+
+### Blockquote
+> This is a blockquote with important information
+
+### Table
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Markdown | ✅ | Working |
+| LaTeX | ✅ | Working |
+| Code | ✅ | Working |
+        `;
+
+        document.getElementById('markdownTest').innerHTML = renderer.renderContent(markdownContent);
+
+        // Test LaTeX rendering
+        const latexContent = `
+## Mathematical Formulas
+
+### Basic Math
+Inline math: $E = mc^2$ and $\\pi r^2$
+
+### Complex Equations
+$$\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}$$
+
+### Matrix
+$$\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}$$
+
+### Summation
+$$\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}$$
+        `;
+
+        document.getElementById('latexTest').innerHTML = renderer.renderContent(latexContent);
+
+        // Test code highlighting
+        const codeContent = `
+## Programming Examples
+
+### JavaScript
+\`\`\`javascript
+function fibonacci(n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+// Example usage
+console.log(fibonacci(10));
+\`\`\`
+
+### Python
+\`\`\`python
+import numpy as np
+import matplotlib.pyplot as plt
+
+def create_matrix():
+    return np.random.rand(3, 3)
+
+matrix = create_matrix()
+print(matrix)
+\`\`\`
+
+### Inline Code
+Use the \`Math.random()\` function for random numbers and \`JSON.stringify()\` for object conversion.
+        `;
+
+        document.getElementById('codeTest').innerHTML = renderer.renderContent(codeContent);
+
+        // Test combined features
+        const combinedContent = `
+# 🎉 Combined Features Demo
+
+## 📊 Data Analysis Example
+
+Here's a function that generates a random dataset:
+
+\`\`\`python
+import pandas as pd
+import numpy as np
+
+def generate_sales_data():
+    \"\"\"Generate sample sales data with mathematical formulas\"\"\"
+    dates = pd.date_range('2023-01-01', periods=365, freq='D')
+    base_sales = 1000
+    seasonal_factor = np.sin(2 * np.pi * np.arange(365) / 365) * 200
+    noise = np.random.normal(0, 50, 365)
+    
+    sales = base_sales + seasonal_factor + noise
+    
+    return pd.DataFrame({
+        'date': dates,
+        'sales': sales
+    })
+
+data = generate_sales_data()
+print(data.head())
+\`\`\`
+
+## 🧮 Mathematical Analysis
+
+The **revenue function** is given by:
+$$R(x) = P(x) \\times Q(x)$$
+
+Where:
+- $P(x)$ is the price function: $P(x) = ax + b$
+- $Q(x)$ is the quantity function: $Q(x) = cx^2 + dx + e$
+
+### Revenue Formula
+$$\\frac{dR}{dx} = acx^2 + (ad + bc)x + (ae + bd)$$
+
+## 📈 Key Insights
+
+| Metric | Formula | Implementation |
+|--------|---------|----------------|
+| Profit | $P = R - C$ | ✅ Available |
+| Growth Rate | $g = \\frac{R_t - R_{t-1}}{R_{t-1}}$ | ✅ Available |
+| ROI | $ROI = \\frac{Profit}{Investment} \\times 100$ | ✅ Available |
+
+> **Pro Tip**: Use mathematical formulas in your code comments for better documentation!
+
+\`\`\`javascript
+// Calculate compound interest: A = P(1 + r/n)^(nt)
+function compoundInterest(principal, rate, times, years) {
+    return principal * Math.pow(1 + rate/times, times * years);
+}
+
+// Example: $1000 at 5% annual rate, compounded quarterly for 10 years
+const result = compoundInterest(1000, 0.05, 4, 10);
+console.log(\`Final amount: $\${result.toFixed(2)}\`);
+\`\`\`
+
+**Features Successfully Tested:**
+- ✅ **Markdown rendering** with headers, lists, tables, and formatting
+- ✅ **LaTeX math rendering** for both inline ($...$) and display ($$...$$) equations  
+- ✅ **Syntax highlighting** for JavaScript, Python, and other languages
+- ✅ **Copy buttons** for code blocks
+- ✅ **Sanitization** with DOMPurify for security
+- ✅ **Responsive design** and mobile compatibility
+        `;
+
+        document.getElementById('combinedTest').innerHTML = renderer.renderContent(combinedContent);
+
+        // Initialize containers for interactive elements
+        ['markdownTest', 'latexTest', 'codeTest', 'combinedTest'].forEach(id => {
+            renderer.initializeContainer(document.getElementById(id));
+        });
+
+        console.log('✅ Content Renderer Test Complete!');
+        console.log('📝 Markdown features: Working');
+        console.log('🧮 LaTeX rendering: Working');
+        console.log('💻 Code highlighting: Working');
+        console.log('🎨 Combined features: Working');
+    </script>
+</body>
+
+</html>

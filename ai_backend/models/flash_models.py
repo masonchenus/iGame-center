@@ -1,11 +1,3 @@
-"""Simulated Flash-family AI models: Flash, ProFlash, Ultra, UltraFlash.
-
-Each class implements a `generate(prompt)` method that returns a deterministic
-string useful for local testing and integration.
-"""
-import hashlib
-import re
-
 
 class BaseFlash:
     def __init__(self, tier: str = "flash"):
@@ -19,7 +11,7 @@ class BaseFlash:
 
     def generate_tokens(self, text: str) -> list:
         """Generate tokens using the Flash model's token method.
-        
+
         Flash uses a simplified byte-pair encoding-like approach.
         """
         # Simple BPE-like tokenization: split on whitespace and punctuation
@@ -30,6 +22,12 @@ class BaseFlash:
 class FlashModel(BaseFlash):
     def __init__(self):
         super().__init__(tier="flash")
+
+    def generate_tokens(self, text: str) -> list:
+        """Flash uses a simplified byte-pair encoding-like approach."""
+        # Simple BPE-like tokenization: split on whitespace and punctuation
+        tokens = re.findall(r"\w+|[.,!?;:]", text)
+        return tokens if tokens else text.split()
 
 
 class ProFlashModel(BaseFlash):

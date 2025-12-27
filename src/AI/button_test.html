@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+
+        .button-test {
+            margin: 10px;
+            padding: 15px 25px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .button-test:hover {
+            background: #0056b3;
+        }
+
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 5px;
+        }
+
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>AI Interface Button Test</h1>
+
+    <div class="status" id="status">Testing button functionality...</div>
+
+    <button class="button-test" id="testBtn1">Test Button 1 - Send Message</button>
+    <button class="button-test" id="testBtn2">Test Button 2 - New Chat</button>
+    <button class="button-test" id="testBtn3">Test Button 3 - Toggle Parameters</button>
+    <button class="button-test" id="testBtn4">Test Button 4 - Show Metrics</button>
+    <button class="button-test" id="testBtn5">Test Button 5 - Update Parameters</button>
+
+    <div class="status" id="results"></div>
+
+    <script>
+        console.log('🧪 Starting button test...');
+
+        const statusDiv = document.getElementById('status');
+        const resultsDiv = document.getElementById('results');
+
+        // Test if buttons exist and can be clicked
+        const testButtons = [
+            { id: 'testBtn1', name: 'Send Message' },
+            { id: 'testBtn2', name: 'New Chat' },
+            { id: 'testBtn3', name: 'Toggle Parameters' },
+            { id: 'testBtn4', name: 'Show Metrics' },
+            { id: 'testBtn5', name: 'Update Parameters' }
+        ];
+
+        let allWorking = true;
+        let testResults = [];
+
+        testButtons.forEach((btn, index) => {
+            const element = document.getElementById(btn.id);
+            if (element) {
+                console.log(`✅ ${btn.name} button found`);
+
+                // Add click handler
+                element.addEventListener('click', () => {
+                    console.log(`🖱️ ${btn.name} button clicked!`);
+                    alert(`${btn.name} button works!`);
+                });
+
+                testResults.push(`✅ ${btn.name} - Working`);
+            } else {
+                console.error(`❌ ${btn.name} button not found`);
+                testResults.push(`❌ ${btn.name} - Missing`);
+                allWorking = false;
+            }
+        });
+
+        // Show results
+        setTimeout(() => {
+            if (allWorking) {
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = '🎉 All buttons are working correctly!';
+                resultsDiv.innerHTML = testResults.join('<br>');
+                console.log('✅ All buttons tested successfully');
+            } else {
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = '❌ Some buttons are not working';
+                resultsDiv.innerHTML = testResults.join('<br>');
+                console.error('❌ Some button tests failed');
+            }
+        }, 100);
+
+        // Test if we can access the main interface elements
+        const mainElements = [
+            'sendBtn', 'promptInput', 'newChatBtn', 'toggleParameters', 'showAllMetrics'
+        ];
+
+        let mainElementsWorking = true;
+        const mainResults = [];
+
+        mainElements.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                mainResults.push(`✅ ${id} - Available`);
+            } else {
+                mainResults.push(`❌ ${id} - Missing`);
+                mainElementsWorking = false;
+            }
+        });
+
+        setTimeout(() => {
+            if (mainElementsWorking) {
+                resultsDiv.innerHTML += '<br><br><strong>Main Interface Elements:</strong><br>' + mainResults.join('<br>');
+            } else {
+                resultsDiv.innerHTML += '<br><br><strong>Main Interface Elements:</strong><br>' + mainResults.join('<br>');
+                console.error('❌ Some main interface elements are missing');
+            }
+        }, 500);
+    </script>
+</body>
+
+</html>

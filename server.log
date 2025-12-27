@@ -1,18 +1,50 @@
-node:internal/modules/cjs/loader:1423
-  throw err;
-  ^
+INFO:     Will watch for changes in these directories: ['/Users/mason/Game Center Project']
+INFO:iGame-AI:iGame-AI package initialized with core and extra models loaded.
+INFO:     Started server process [97929]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+🧠 Enhanced AI System Startup
+========================================
+🔧 Checking dependencies...
+📁 Setting up directories...
+Created directory: ai_backend/logs
+Created directory: ai_backend/cache
+Created directory: temp
+Created directory: generated_code
+🚀 Starting server...
+🚀 Starting Enhanced AI Server...
+📍 Server will be available at: http://localhost:8000
+📖 API Documentation: http://localhost:8000/docs
+🔧 Tools API: http://localhost:8000/api/tools
+💬 Enhanced Chat: http://localhost:8000/chat
 
-Error: Cannot find module '/Users/mason/Game Center Project/scripts/server.js'
-    at Module._resolveFilename (node:internal/modules/cjs/loader:1420:15)
-    at defaultResolveImpl (node:internal/modules/cjs/loader:1058:19)
-    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1063:22)
-    at Module._load (node:internal/modules/cjs/loader:1226:37)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:244:24)
-    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
-    at node:internal/main/run_main_module:33:47 {
-  code: 'MODULE_NOT_FOUND',
-  requireStack: []
-}
-
-Node.js v24.8.0
+==================================================
+Warning: OPENAI_API_KEY not found in environment. Using fallback response.
+Warning: GROK_API_KEY not found in environment. Using fallback response.
+Created test questions for: {prompt}.
+INFO:     127.0.0.1:57409 - "GET /api/health HTTP/1.1" 200 OK
+INFO:ai_backend.models.model_manager:Initialized 6 models
+INFO:     127.0.0.1:57637 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57795 - "GET /api/tools HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58265 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58537 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60530 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60797 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60797 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60797 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60797 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60797 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60797 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60969 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60969 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60969 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60969 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61082 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61082 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61345 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61345 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [97929]

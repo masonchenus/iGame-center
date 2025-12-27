@@ -13,7 +13,8 @@
 // Configuration
 const CONFIG = {
     API_URL: "http://127.0.0.1:8000/api/run",
-    DEFAULT_MODEL: "nexus",
+    MODELS_URL: "http://127.0.0.1:8000/api/models",
+    DEFAULT_MODEL: "chatgpt",
     METRICS_UPDATE_INTERVAL: 5000, // 5 seconds
     MAX_CHAT_HISTORY: 100,
     MAX_METRICS_HISTORY: 500
@@ -25,65 +26,153 @@ let chatHistory = [];
 let currentModule = 'codegen_module';
 let isAllMetricsVisible = false;
 
+// Model management state
+const currentModel = CONFIG.DEFAULT_MODEL;
+let availableModels = [];
+
 // Available modules from ai_backend/modules/
 const AVAILABLE_MODULES = {
-    // Development
-    'codegen_module': { name: 'Code Generator', category: 'development', icon: '💻', description: 'Generate code snippets' },
-    'code_review_module': { name: 'Code Review', category: 'development', icon: '🔍', description: 'Review and improve code' },
-    'debug_module': { name: 'Debug Assistant', category: 'development', icon: '🐛', description: 'Find and fix bugs' },
-    'documentation_module': { name: 'Documentation', category: 'development', icon: '📚', description: 'Generate documentation' },
-
-    // Multilingual Programming (New!)
+    // Development (15+ tools)
+    'codegen_module': { name: 'Code Generator', category: 'development', icon: '💻', description: 'Generate code snippets and programs' },
+    'code_review_module': { name: 'Code Review', category: 'development', icon: '🔍', description: 'Review and improve existing code' },
+    'debug_module': { name: 'Debug Assistant', category: 'development', icon: '🐛', description: 'Find and fix bugs in code' },
+    'documentation_module': { name: 'Documentation', category: 'development', icon: '📚', description: 'Generate comprehensive documentation' },
     'python_ml_module': { name: 'Python ML/AI', category: 'development', icon: '🐍', description: 'Python machine learning and data science' },
     'javascript_ts_module': { name: 'JavaScript/TypeScript', category: 'development', icon: '🟨', description: 'Modern JS/TS web development' },
     'go_module': { name: 'Go Programming', category: 'development', icon: '🐹', description: 'Go microservices and systems programming' },
     'rust_module': { name: 'Rust Programming', category: 'development', icon: '🦀', description: 'Rust systems programming and WebAssembly' },
     'java_module': { name: 'Java Enterprise', category: 'development', icon: '☕', description: 'Java enterprise applications and patterns' },
+    'csharp_module': { name: 'C# Development', category: 'development', icon: '🔷', description: 'C# .NET development and frameworks' },
+    'swift_module': { name: 'Swift Development', category: 'development', icon: '🍎', description: 'iOS and macOS app development' },
+    'kotlin_module': { name: 'Kotlin Development', category: 'development', icon: '🔷', description: 'Android and server-side development' },
+    'php_module': { name: 'PHP Development', category: 'development', icon: '🐘', description: 'Web development with PHP frameworks' },
+    'ruby_module': { name: 'Ruby Development', category: 'development', icon: '💎', description: 'Ruby on Rails and web development' },
+    'sql_module': { name: 'SQL Database', category: 'development', icon: '🗄️', description: 'Database design and optimization' },
 
-    // Analysis
-    'data_analysis_module': { name: 'Data Analysis', category: 'analysis', icon: '📊', description: 'Analyze datasets' },
-    'stats_analyzer_module': { name: 'Statistics', category: 'analysis', icon: '📈', description: 'Statistical analysis' },
-    'comparison_module': { name: 'Comparison', category: 'analysis', icon: '⚖️', description: 'Compare items/concepts' },
-    'fact_check_module': { name: 'Fact Check', category: 'analysis', icon: '✅', description: 'Verify information' },
+    // Analysis (10+ tools)
+    'data_analysis_module': { name: 'Data Analysis', category: 'analysis', icon: '📊', description: 'Analyze datasets and patterns' },
+    'stats_analyzer_module': { name: 'Statistics', category: 'analysis', icon: '📈', description: 'Advanced statistical analysis' },
+    'comparison_module': { name: 'Comparison', category: 'analysis', icon: '⚖️', description: 'Compare items, concepts, and options' },
+    'fact_check_module': { name: 'Fact Check', category: 'analysis', icon: '✅', description: 'Verify information and claims' },
+    'trend_analysis_module': { name: 'Trend Analysis', category: 'analysis', icon: '📈', description: 'Identify trends in data and behavior' },
+    'sentiment_analysis_module': { name: 'Sentiment Analysis', category: 'analysis', icon: '😊', description: 'Analyze emotions and sentiment in text' },
+    'risk_assessment_module': { name: 'Risk Assessment', category: 'analysis', icon: '⚠️', description: 'Evaluate risks and potential outcomes' },
+    'competitor_analysis_module': { name: 'Competitor Analysis', category: 'analysis', icon: '🎯', description: 'Analyze competitors and market positioning' },
+    'performance_analysis_module': { name: 'Performance Analysis', category: 'analysis', icon: '⚡', description: 'Analyze system and process performance' },
+    'anomaly_detection_module': { name: 'Anomaly Detection', category: 'analysis', icon: '🚨', description: 'Detect unusual patterns and outliers' },
 
-    // Creativity
-    'creativity_module': { name: 'Creativity', category: 'creativity', icon: '🎨', description: 'Generate creative ideas' },
-    'brainstorming_module': { name: 'Brainstorming', category: 'creativity', icon: '💡', description: 'Brainstorm solutions' },
-    'design_module': { name: 'Design', category: 'creativity', icon: '🎭', description: 'Design concepts' },
-    'poem_module': { name: 'Poetry', category: 'creativity', icon: '📝', description: 'Generate poems' },
-    'story_module': { name: 'Storytelling', category: 'creativity', icon: '📖', description: 'Create stories' },
+    // Creativity (12+ tools)
+    'creativity_module': { name: 'Creativity', category: 'creativity', icon: '🎨', description: 'Generate creative ideas and concepts' },
+    'brainstorming_module': { name: 'Brainstorming', category: 'creativity', icon: '💡', description: 'Brainstorm solutions and ideas' },
+    'design_module': { name: 'Design', category: 'creativity', icon: '🎭', description: 'Design concepts and layouts' },
+    'poem_module': { name: 'Poetry', category: 'creativity', icon: '📝', description: 'Generate poems in various styles' },
+    'story_module': { name: 'Storytelling', category: 'creativity', icon: '📖', description: 'Create stories and narratives' },
+    'music_composition_module': { name: 'Music Composition', category: 'creativity', icon: '🎵', description: 'Compose music and lyrics' },
+    'art_generator_module': { name: 'Art Generation', category: 'creativity', icon: '🖼️', description: 'Generate artistic concepts and descriptions' },
+    'logo_design_module': { name: 'Logo Design', category: 'creativity', icon: '🏷️', description: 'Create logo concepts and branding' },
+    'video_script_module': { name: 'Video Script', category: 'creativity', icon: '🎬', description: 'Write video scripts and storyboards' },
+    'podcast_script_module': { name: 'Podcast Script', category: 'creativity', icon: '🎙️', description: 'Create podcast episodes and scripts' },
+    'game_story_module': { name: 'Game Storytelling', category: 'creativity', icon: '🎮', description: 'Create game narratives and lore' },
+    'character_development_module': { name: 'Character Development', category: 'creativity', icon: '👤', description: 'Develop fictional characters and personalities' },
 
-    // Productivity
-    'productivity_module': { name: 'Productivity', category: 'productivity', icon: '⚡', description: 'Boost productivity' },
-    'planning_module': { name: 'Planning', category: 'productivity', icon: '📅', description: 'Create plans' },
-    'checklist_module': { name: 'Checklist', category: 'productivity', icon: '☑️', description: 'Generate checklists' },
-    'optimization_module': { name: 'Optimization', category: 'productivity', icon: '🚀', description: 'Optimize workflows' },
+    // Productivity (15+ tools)
+    'productivity_module': { name: 'Productivity', category: 'productivity', icon: '⚡', description: 'Boost overall productivity' },
+    'planning_module': { name: 'Planning', category: 'productivity', icon: '📅', description: 'Create comprehensive plans' },
+    'checklist_module': { name: 'Checklist', category: 'productivity', icon: '☑️', description: 'Generate detailed checklists' },
+    'optimization_module': { name: 'Optimization', category: 'productivity', icon: '🚀', description: 'Optimize workflows and processes' },
+    'time_management_module': { name: 'Time Management', category: 'productivity', icon: '⏰', description: 'Manage time effectively' },
+    'project_management_module': { name: 'Project Management', category: 'productivity', icon: '📋', description: 'Manage projects and timelines' },
+    'task_automation_module': { name: 'Task Automation', category: 'productivity', icon: '🤖', description: 'Automate repetitive tasks' },
+    'workflow_design_module': { name: 'Workflow Design', category: 'productivity', icon: '🔄', description: 'Design efficient workflows' },
+    'meeting_agenda_module': { name: 'Meeting Agenda', category: 'productivity', icon: '📝', description: 'Create meeting agendas and notes' },
+    'report_generator_module': { name: 'Report Generator', category: 'productivity', icon: '📊', description: 'Generate professional reports' },
+    'email_composer_module': { name: 'Email Composer', category: 'productivity', icon: '📧', description: 'Compose effective emails' },
+    'calendar_optimization_module': { name: 'Calendar Optimization', category: 'productivity', icon: '📅', description: 'Optimize calendar and scheduling' },
+    'goal_setting_module': { name: 'Goal Setting', category: 'productivity', icon: '🎯', description: 'Set and track goals effectively' },
+    'habit_formation_module': { name: 'Habit Formation', category: 'productivity', icon: '🔄', description: 'Build positive habits' },
+    'resource_planning_module': { name: 'Resource Planning', category: 'productivity', icon: '📦', description: 'Plan and allocate resources efficiently' },
 
-    // Entertainment
-    'game_generator': { name: 'Game Generator', category: 'entertainment', icon: '🎮', description: 'Create games' },
-    'joke_module': { name: 'Jokes', category: 'entertainment', icon: '😄', description: 'Tell jokes' },
-    'trivia_module': { name: 'Trivia', category: 'entertainment', icon: '🧠', description: 'Quiz questions' },
-    'riddle_module': { name: 'Riddles', category: 'entertainment', icon: '🤔', description: 'Solve riddles' },
+    // Business & Finance (8+ tools)
+    'business_plan_module': { name: 'Business Plan', category: 'business', icon: '📈', description: 'Create comprehensive business plans' },
+    'financial_analysis_module': { name: 'Financial Analysis', category: 'business', icon: '💰', description: 'Analyze financial data and performance' },
+    'market_research_module': { name: 'Market Research', category: 'business', icon: '🔍', description: 'Conduct market research and analysis' },
+    'investment_analysis_module': { name: 'Investment Analysis', category: 'business', icon: '📊', description: 'Analyze investment opportunities' },
+    'budget_planning_module': { name: 'Budget Planning', category: 'business', icon: '💵', description: 'Create and manage budgets' },
+    'pitch_deck_module': { name: 'Pitch Deck', category: 'business', icon: '🎤', description: 'Create investor pitch presentations' },
+    'competitive_analysis_module': { name: 'Competitive Analysis', category: 'business', icon: '⚔️', description: 'Analyze competitors and market position' },
+    'roi_calculator_module': { name: 'ROI Calculator', category: 'business', icon: '📈', description: 'Calculate return on investment' },
 
-    // Communication
-    'dialogue_module': { name: 'Dialogue', category: 'communication', icon: '💬', description: 'Generate conversations' },
-    'translator_module': { name: 'Translator', category: 'communication', icon: '🌐', description: 'Translate text' },
-    'summarizer_module': { name: 'Summarizer', category: 'communication', icon: '📋', description: 'Summarize content' },
+    // Entertainment (8+ tools)
+    'game_generator': { name: 'Game Generator', category: 'entertainment', icon: '🎮', description: 'Create games and game concepts' },
+    'joke_module': { name: 'Jokes', category: 'entertainment', icon: '😄', description: 'Tell jokes and funny content' },
+    'trivia_module': { name: 'Trivia', category: 'entertainment', icon: '🧠', description: 'Generate quiz questions and trivia' },
+    'riddle_module': { name: 'Riddles', category: 'entertainment', icon: '🤔', description: 'Create and solve riddles' },
+    'quiz_generator_module': { name: 'Quiz Generator', category: 'entertainment', icon: '❓', description: 'Generate interactive quizzes' },
+    'party_games_module': { name: 'Party Games', category: 'entertainment', icon: '🎉', description: 'Create party games and activities' },
+    'movie_recommendations_module': { name: 'Movie Recommendations', category: 'entertainment', icon: '🎬', description: 'Recommend movies and shows' },
+    'book_recommendations_module': { name: 'Book Recommendations', category: 'entertainment', icon: '📚', description: 'Recommend books and literature' },
 
-    // Education
-    'explain_module': { name: 'Explanation', category: 'education', icon: '🎓', description: 'Explain concepts' },
-    'quiz_module': { name: 'Quiz Creator', category: 'education', icon: '❓', description: 'Create quizzes' },
-    'test_creator_module': { name: 'Test Creator', category: 'education', icon: '📝', description: 'Generate tests' },
-    'math_explain_module': { name: 'Math Helper', category: 'education', icon: '🔢', description: 'Math explanations' },
+    // Communication (10+ tools)
+    'dialogue_module': { name: 'Dialogue', category: 'communication', icon: '💬', description: 'Generate conversations and dialogue' },
+    'translator_module': { name: 'Translator', category: 'communication', icon: '🌐', description: 'Translate text between languages' },
+    'summarizer_module': { name: 'Summarizer', category: 'communication', icon: '📋', description: 'Summarize content and documents' },
+    'presentation_module': { name: 'Presentation Builder', category: 'communication', icon: '📊', description: 'Create presentations and slides' },
+    'social_media_module': { name: 'Social Media Content', category: 'communication', icon: '📱', description: 'Create social media posts and content' },
+    'press_release_module': { name: 'Press Release', category: 'communication', icon: '📰', description: 'Write press releases and announcements' },
+    'customer_service_module': { name: 'Customer Service', category: 'communication', icon: '🎧', description: 'Generate customer service responses' },
+    'negotiation_module': { name: 'Negotiation', category: 'communication', icon: '🤝', description: 'Develop negotiation strategies' },
+    'conflict_resolution_module': { name: 'Conflict Resolution', category: 'communication', icon: '🕊️', description: 'Resolve conflicts and disputes' },
+    'public_speaking_module': { name: 'Public Speaking', category: 'communication', icon: '🎤', description: 'Prepare speeches and presentations' },
 
-    // Specialized
-    'diagram_module': { name: 'Diagrams', category: 'specialized', icon: '📐', description: 'Create diagrams' },
-    'slides_generator': { name: 'Slides', category: 'specialized', icon: '📊', description: 'Generate presentations' },
-    'health_module': { name: 'Health Tips', category: 'specialized', icon: '🏥', description: 'Health advice' },
-    'recommendation_module': { name: 'Recommendations', category: 'specialized', icon: '👍', description: 'Give recommendations' },
+    // Education (12+ tools)
+    'explain_module': { name: 'Explanation', category: 'education', icon: '🎓', description: 'Explain complex concepts clearly' },
+    'quiz_module': { name: 'Quiz Creator', category: 'education', icon: '❓', description: 'Create educational quizzes' },
+    'test_creator_module': { name: 'Test Creator', category: 'education', icon: '📝', description: 'Generate tests and assessments' },
+    'math_explain_module': { name: 'Math Helper', category: 'education', icon: '🔢', description: 'Math explanations and problem solving' },
+    'science_explain_module': { name: 'Science Explainer', category: 'education', icon: '🔬', description: 'Explain scientific concepts' },
+    'history_explain_module': { name: 'History Explainer', category: 'education', icon: '🏛️', description: 'Explain historical events and contexts' },
+    'language_learning_module': { name: 'Language Learning', category: 'education', icon: '🗣️', description: 'Help with language learning and practice' },
+    'study_guide_module': { name: 'Study Guide', category: 'education', icon: '📖', description: 'Create comprehensive study guides' },
+    'lesson_plan_module': { name: 'Lesson Plan', category: 'education', icon: '📚', description: 'Design lesson plans and curricula' },
+    'research_assistant_module': { name: 'Research Assistant', category: 'education', icon: '🔍', description: 'Help with research and citations' },
+    'academic_writing_module': { name: 'Academic Writing', category: 'education', icon: '✍️', description: 'Assist with academic writing and papers' },
+    'learning_assessment_module': { name: 'Learning Assessment', category: 'education', icon: '📊', description: 'Assess learning progress and outcomes' },
 
-    // Test Module - TROJAN (Non-existent for testing error handling)
-    'trojan_test_module': { name: '🚨 TROJAN TEST', category: 'testing', icon: '⚠️', description: 'TEST MODULE: This should cause module not found error' }
+    // Specialized (15+ tools)
+    'diagram_module': { name: 'Diagrams', category: 'specialized', icon: '📐', description: 'Create diagrams and flowcharts' },
+    'slides_generator': { name: 'Slides', category: 'specialized', icon: '📊', description: 'Generate presentations and slides' },
+    'health_module': { name: 'Health Tips', category: 'specialized', icon: '🏥', description: 'Provide health and wellness advice' },
+    'recommendation_module': { name: 'Recommendations', category: 'specialized', icon: '👍', description: 'Give personalized recommendations' },
+    'seo_optimization_module': { name: 'SEO Optimization', category: 'specialized', icon: '🔍', description: 'Optimize content for search engines' },
+    'legal_assistance_module': { name: 'Legal Assistance', category: 'specialized', icon: '⚖️', description: 'Provide legal guidance and information' },
+    'medical_advice_module': { name: 'Medical Advice', category: 'specialized', icon: '🩺', description: 'Provide medical information and guidance' },
+    'nutrition_planning_module': { name: 'Nutrition Planning', category: 'specialized', icon: '🥗', description: 'Create nutrition and meal plans' },
+    'fitness_planning_module': { name: 'Fitness Planning', category: 'specialized', icon: '💪', description: 'Design fitness and exercise plans' },
+    'travel_planning_module': { name: 'Travel Planning', category: 'specialized', icon: '✈️', description: 'Plan trips and travel itineraries' },
+    'real_estate_module': { name: 'Real Estate', category: 'specialized', icon: '🏠', description: 'Real estate analysis and advice' },
+    'tax_assistance_module': { name: 'Tax Assistance', category: 'specialized', icon: '💼', description: 'Provide tax guidance and information' },
+    'insurance_analysis_module': { name: 'Insurance Analysis', category: 'specialized', icon: '🛡️', description: 'Analyze insurance options and coverage' },
+    'career_counseling_module': { name: 'Career Counseling', category: 'specialized', icon: '💼', description: 'Career guidance and planning' },
+    'relationship_advice_module': { name: 'Relationship Advice', category: 'specialized', icon: '💕', description: 'Relationship guidance and advice' },
+
+    // Technical & Engineering (10+ tools)
+    'api_design_module': { name: 'API Design', category: 'technical', icon: '🔌', description: 'Design and document APIs' },
+    'database_design_module': { name: 'Database Design', category: 'technical', icon: '🗄️', description: 'Design database schemas and structures' },
+    'system_architecture_module': { name: 'System Architecture', category: 'technical', icon: '🏗️', description: 'Design system architectures' },
+    'security_audit_module': { name: 'Security Audit', category: 'technical', icon: '🔒', description: 'Conduct security audits and assessments' },
+    'performance_optimization_module': { name: 'Performance Optimization', category: 'technical', icon: '⚡', description: 'Optimize system and application performance' },
+    'cloud_architecture_module': { name: 'Cloud Architecture', category: 'technical', icon: '☁️', description: 'Design cloud-based solutions' },
+    'devops_automation_module': { name: 'DevOps Automation', category: 'technical', icon: '🔧', description: 'Automate deployment and operations' },
+    'testing_strategy_module': { name: 'Testing Strategy', category: 'technical', icon: '🧪', description: 'Design testing strategies and plans' },
+    'code_review_automation_module': { name: 'Code Review Automation', category: 'technical', icon: '🤖', description: 'Automate code review processes' },
+    'microservices_design_module': { name: 'Microservices Design', category: 'technical', icon: '🔗', description: 'Design microservices architectures' },
+
+    // Testing & Quality (5+ tools)
+    'trojan_test_module': { name: '🚨 TROJAN TEST', category: 'testing', icon: '⚠️', description: 'TEST MODULE: This should cause module not found error' },
+    'unit_testing_module': { name: 'Unit Testing', category: 'testing', icon: '🧪', description: 'Generate unit tests for code' },
+    'integration_testing_module': { name: 'Integration Testing', category: 'testing', icon: '🔗', description: 'Design integration test suites' },
+    'performance_testing_module': { name: 'Performance Testing', category: 'testing', icon: '⚡', description: 'Design performance testing strategies' },
+    'security_testing_module': { name: 'Security Testing', category: 'testing', icon: '🔒', description: 'Conduct security penetration testing' }
 };
 
 // Comprehensive metrics (500+ metrics)
@@ -168,6 +257,52 @@ const elements = {
     loadingIndicator: document.getElementById('loadingIndicator')
 };
 
+// Model Management Functions
+async function loadAvailableModels() {
+    try {
+        const response = await fetch(CONFIG.MODELS_URL);
+        if (response.ok) {
+            const data = await response.json();
+            availableModels = data.available_models || [];
+            updateModelSelector();
+            console.log("Available models loaded:", availableModels);
+        } else {
+            console.warn("Failed to load available models, using fallback");
+            setFallbackModels();
+        }
+    } catch (error) {
+        console.warn("Error loading models:", error);
+        setFallbackModels();
+    }
+}
+
+function setFallbackModels() {
+    availableModels.length = 0; // Clear array
+    availableModels.push(
+        { name: "chatgpt", display_name: "ChatGPT", available: true, description: "OpenAI's advanced conversational AI" },
+        { name: "gemini", display_name: "Google Gemini", available: true, description: "Google's multimodal AI model" },
+        { name: "claude", display_name: "Anthropic Claude", available: true, description: "Anthropic's helpful AI assistant" },
+        { name: "grok", display_name: "Grok AI", available: true, description: "X's AI with real-time knowledge" },
+        { name: "nexus", display_name: "Nexus AI", available: true, description: "Default system model" },
+        { name: "flash", display_name: "Flash Model", available: true, description: "Fast response model" },
+        { name: "ultra", display_name: "Ultra Model", available: true, description: "High-performance model" },
+        { name: "cohere", display_name: "Cohere AI", available: true, description: "Enterprise-focused language model" },
+        { name: "deepseek", display_name: "DeepSeek", available: true, description: "Advanced reasoning model" },
+        { name: "llama", display_name: "Meta Llama", available: true, description: "Open-source language model" }
+    );
+    updateModelSelector();
+}
+
+function updateModelSelector() {
+    const modelStatusElement = document.getElementById('modelStatus');
+    if (modelStatusElement) {
+        const currentModelInfo = availableModels.find(m => m.name === currentModel);
+        const displayName = currentModelInfo ? currentModelInfo.display_name : currentModel;
+        modelStatusElement.textContent = displayName;
+        modelStatusElement.className = `status-indicator status-info`;
+    }
+}
+
 // Initialize the interface
 function initializeInterface() {
     setupEventListeners();
@@ -175,6 +310,7 @@ function initializeInterface() {
     initializeModuleList();
     startMetricsMonitoring();
     loadSettings();
+    loadAvailableModels();
 
     console.log("Enhanced AI Interface initialized with new features");
 }
@@ -570,7 +706,7 @@ async function handleSendMessage() {
 async function sendAIRequest(prompt) {
     const requestData = {
         mode: currentModule.replace('_module', '').replace('_', '-'),
-        model: CONFIG.DEFAULT_MODEL,
+        model: currentModel,
         input: JSON.stringify({
             prompt: prompt,
             module: currentModule

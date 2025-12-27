@@ -7,7 +7,7 @@
 const CONFIG = {
     API_URL: "http://127.0.0.1:8000/api/run",
     MODELS_URL: "http://127.0.0.1:8000/api/models",
-    DEFAULT_MODEL: "nexus",
+    DEFAULT_MODEL: "chatgpt",
     METRICS_UPDATE_INTERVAL: 5000, // 5 seconds
     PARAMETER_UPDATE_INTERVAL: 30000, // 30 seconds
 };
@@ -115,9 +115,16 @@ async function loadAvailableModels() {
 
 function setFallbackModels() {
     availableModels = [
+        { name: "chatgpt", display_name: "ChatGPT", available: true, description: "OpenAI's advanced conversational AI" },
+        { name: "gemini", display_name: "Google Gemini", available: true, description: "Google's multimodal AI model" },
+        { name: "claude", display_name: "Anthropic Claude", available: true, description: "Anthropic's helpful AI assistant" },
+        { name: "grok", display_name: "Grok AI", available: true, description: "X's AI with real-time knowledge" },
         { name: "nexus", display_name: "Nexus AI", available: true, description: "Default system model" },
         { name: "flash", display_name: "Flash Model", available: true, description: "Fast response model" },
-        { name: "ultra", display_name: "Ultra Model", available: true, description: "High-performance model" }
+        { name: "ultra", display_name: "Ultra Model", available: true, description: "High-performance model" },
+        { name: "cohere", display_name: "Cohere AI", available: true, description: "Enterprise-focused language model" },
+        { name: "deepseek", display_name: "DeepSeek", available: true, description: "Advanced reasoning model" },
+        { name: "llama", display_name: "Meta Llama", available: true, description: "Open-source language model" }
     ];
     currentModel = CONFIG.DEFAULT_MODEL;
     updateModelSelector();

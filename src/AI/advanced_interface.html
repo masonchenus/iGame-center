@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced AI Interface - Professional Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0d1117;
+            color: #f0f6fc;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            height: 100vh;
+            gap: 1px;
+            background: #21262d;
+        }
+
+        /* Left Sidebar - Chat History */
+        .sidebar-left {
+            background: #161b22;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #30363d;
+        }
+
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f0f6fc;
+        }
+
+        .new-chat-btn {
+            background: #238636;
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .new-chat-btn:hover {
+            background: #2ea043;
+        }
+
+        .chat-history {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+
+        .chat-item {
+            padding: 12px;
+            margin-bottom: 4px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .chat-item:hover {
+            background: #21262d;
+            border-color: #30363d;
+        }
+
+        .chat-item.active {
+            background: #1f6feb;
+            border-color: #388bfd;
+        }
+
+        .chat-item-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #f0f6fc;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-item-time {
+            font-size: 12px;
+            color: #8b949e;
+        }
+
+        /* Center Panel - Main Chat */
+        .main-chat {
+            display: flex;
+            flex-direction: column;
+            background: #0d1117;
+        }
+
+        .chat-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #161b22;
+        }
+
+        .chat-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #f0f6fc;
+        }
+
+        .model-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .model-selector {
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #f0f6fc;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .model-selector:hover {
+            border-color: #8b949e;
+        }
+
+        .status-indicator {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-online {
+            background: #1f6feb;
+            color: white;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            margin-bottom: 24px;
+            display: flex;
+            gap: 12px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .message-avatar.user {
+            background: #1f6feb;
+            color: white;
+        }
+
+        .message-avatar.ai {
+            background: #238636;
+            color: white;
+        }
+
+        .message-content {
+            flex: 1;
+            max-width: calc(100% - 44px);
+        }
+
+        .message-text {
+            background: #161b22;
+            padding: 12px 16px;
+            border-radius: 12px;
+            line-height: 1.5;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+
+        .message.user .message-text {
+            background: #1f6feb;
+            color: white;
+        }
+
+        .message-tool-calls {
+            margin-top: 8px;
+            padding: 8px;
+            background: #161b22;
+            border-radius: 8px;
+            border-left: 3px solid #238636;
+        }
+
+        .tool-call {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #8b949e;
+            margin-bottom: 4px;
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            border-top: 1px solid #30363d;
+            background: #161b22;
+        }
+
+        .chat-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: #f0f6fc;
+            font-size: 14px;
+            line-height: 1.4;
+            resize: none;
+            min-height: 44px;
+            max-height: 200px;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #1f6feb;
+        }
+
+        .chat-input::placeholder {
+            color: #8b949e;
+        }
+
+        .send-btn {
+            background: #1f6feb;
+            border: none;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .send-btn:hover {
+            background: #388bfd;
+        }
+
+        .send-btn:disabled {
+            background: #30363d;
+            cursor: not-allowed;
+        }
+
+        .input-tools {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .input-tool-btn {
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #8b949e;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .input-tool-btn:hover {
+            border-color: #8b949e;
+            color: #f0f6fc;
+        }
+
+        /* Right Sidebar - Tools & Modules */
+        .sidebar-right {
+            background: #161b22;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #30363d;
+        }
+
+        .tools-header {
+            padding: 16px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tools-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f0f6fc;
+        }
+
+        .tools-count {
+            background: #238636;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .tools-search {
+            padding: 12px 16px;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .search-input {
+            width: 100%;
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: #f0f6fc;
+            font-size: 14px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #1f6feb;
+        }
+
+        .tools-categories {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+
+        .category {
+            margin-bottom: 16px;
+        }
+
+        .category-header {
+            padding: 8px 12px;
+            background: #21262d;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #8b949e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-icon {
+            font-size: 14px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .tool-item {
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .tool-item:hover {
+            border-color: #1f6feb;
+            background: #1c2128;
+        }
+
+        .tool-item.active {
+            border-color: #238636;
+            background: #1c2128;
+        }
+
+        .tool-name {
+            font-size: 11px;
+            font-weight: 500;
+            color: #f0f6fc;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tool-icon {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .tool-description {
+            font-size: 9px;
+            color: #8b949e;
+            line-height: 1.2;
+        }
+
+        /* Loading and Status */
+        .loading-indicator {
+            display: none;
+            padding: 16px;
+            text-align: center;
+            color: #8b949e;
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #30363d;
+            border-top: 2px solid #1f6feb;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 8px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Scrollbars */
+        .chat-messages::-webkit-scrollbar,
+        .chat-history::-webkit-scrollbar,
+        .tools-categories::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track,
+        .chat-history::-webkit-scrollbar-track,
+        .tools-categories::-webkit-scrollbar-track {
+            background: #161b22;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb,
+        .chat-history::-webkit-scrollbar-thumb,
+        .tools-categories::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover,
+        .chat-history::-webkit-scrollbar-thumb:hover,
+        .tools-categories::-webkit-scrollbar-thumb:hover {
+            background: #8b949e;
+        }
+
+        /* Performance Panel Styles */
+        .performance-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .performance-trigger {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1f6feb, #238636);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(31, 111, 235, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .performance-trigger:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(31, 111, 235, 0.4);
+        }
+
+        .performance-icon {
+            font-size: 24px;
+            color: white;
+        }
+
+        .performance-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .performance-modal {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 500px;
+            height: 100vh;
+            background: #161b22;
+            border-left: 1px solid #30363d;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1001;
+            overflow-y: auto;
+        }
+
+        .performance-modal.open {
+            transform: translateX(0);
+        }
+
+        .performance-header {
+            padding: 20px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #0d1117;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .performance-header h3 {
+            color: #f0f6fc;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #8b949e;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #30363d;
+            color: #f0f6fc;
+        }
+
+        .performance-content {
+            padding: 20px;
+        }
+
+        .overview-section,
+        .math-section,
+        .sample-section,
+        .boxes-section {
+            margin-bottom: 30px;
+        }
+
+        .overview-section h4,
+        .math-section h4,
+        .boxes-section h4 {
+            color: #f0f6fc;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .overview-card {
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .overview-card:hover {
+            border-color: #1f6feb;
+            background: #1c2128;
+        }
+
+        .overview-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1f6feb;
+            margin-bottom: 4px;
+        }
+
+        .overview-label {
+            font-size: 12px;
+            color: #8b949e;
+            font-weight: 500;
+        }
+
+        .math-display {
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .formula {
+            text-align: center;
+            font-size: 18px;
+            color: #f0f6fc;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #0d1117;
+            border-radius: 6px;
+        }
+
+        .math-variables {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .variable {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: #0d1117;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+        }
+
+        .var-label {
+            font-weight: bold;
+            color: #8b949e;
+            font-size: 14px;
+        }
+
+        .var-value {
+            font-family: 'Courier New', monospace;
+            color: #1f6feb;
+            font-weight: bold;
+        }
+
+        .sample-section {
+            text-align: center;
+        }
+
+        .sample-btn {
+            background: linear-gradient(135deg, #238636, #1f6feb);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .sample-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(35, 134, 54, 0.3);
+        }
+
+        .sample-result {
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            min-height: 60px;
+            color: #f0f6fc;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+
+        .performance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(8px, 1fr));
+            gap: 1px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: #21262d;
+            border-radius: 8px;
+            padding: 10px;
+            border: 1px solid #30363d;
+        }
+
+        .perf-box {
+            aspect-ratio: 1;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .perf-box:hover {
+            transform: scale(1.2);
+            z-index: 10;
+        }
+
+        .perf-box.excellent {
+            background: #238636;
+        }
+
+        .perf-box.good {
+            background: #1f6feb;
+        }
+
+        .perf-box.average {
+            background: #f39c12;
+        }
+
+        .perf-box.poor {
+            background: #e74c3c;
+        }
+
+        .perf-box::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .perf-box:hover::after {
+            opacity: 1;
+            border-color: #f0f6fc;
+        }
+
+        /* Magnified Performance Section */
+        .magnified-section {
+            margin-bottom: 30px;
+        }
+
+        .magnified-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        .view-toggle-btn {
+            background: linear-gradient(135deg, #1f6feb, #238636);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .view-toggle-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(31, 111, 235, 0.3);
+        }
+
+        .magnified-info {
+            flex: 1;
+            text-align: right;
+            font-size: 11px;
+            color: #8b949e;
+        }
+
+        .magnified-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
+            gap: 2px;
+            max-height: 300px;
+            overflow-y: auto;
+            background: #21262d;
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #30363d;
+        }
+
+        .magnified-box {
+            aspect-ratio: 1;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            min-width: 20px;
+            min-height: 20px;
+        }
+
+        .magnified-box:hover {
+            transform: scale(1.3);
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .magnified-box.excellent {
+            background: #238636;
+        }
+
+        .magnified-box.good {
+            background: #1f6feb;
+        }
+
+        .magnified-box.average {
+            background: #f39c12;
+        }
+
+        .magnified-box.poor {
+            background: #e74c3c;
+        }
+
+        .magnified-list {
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            background: #0d1117;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            font-size: 11px;
+            transition: all 0.2s;
+        }
+
+        .metric-item:hover {
+            border-color: #1f6feb;
+            background: #1c2128;
+        }
+
+        .metric-name {
+            font-weight: 500;
+            color: #f0f6fc;
+        }
+
+        .metric-value {
+            font-family: 'Courier New', monospace;
+            color: #1f6feb;
+            font-weight: bold;
+        }
+
+        .metric-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            margin-right: 8px;
+        }
+
+        .metric-status.excellent {
+            background: #238636;
+        }
+
+        .metric-status.good {
+            background: #1f6feb;
+        }
+
+        .metric-status.average {
+            background: #f39c12;
+        }
+
+        .metric-status.poor {
+            background: #e74c3c;
+        }
+
+        /* Expanded Performance Modal */
+        .performance-expanded-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .performance-expanded-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .performance-expanded-content {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 16px;
+            max-width: 900px;
+            max-height: 80vh;
+            width: 90vw;
+            overflow-y: auto;
+            transform: scale(0.7) translateY(50px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .performance-expanded-modal.show .performance-expanded-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .expanded-header {
+            padding: 24px;
+            border-bottom: 1px solid #30363d;
+            background: #0d1117;
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .expanded-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .expanded-metric-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .expanded-metric-info h3 {
+            color: #f0f6fc;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .expanded-metric-subtitle {
+            color: #8b949e;
+            font-size: 14px;
+        }
+
+        .expanded-close-btn {
+            background: none;
+            border: none;
+            color: #8b949e;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 8px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .expanded-close-btn:hover {
+            background: #30363d;
+            color: #f0f6fc;
+        }
+
+        .expanded-body {
+            padding: 24px;
+        }
+
+        .expanded-metric-value {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .expanded-value-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: #1f6feb;
+            margin-bottom: 8px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .expanded-value-label {
+            font-size: 16px;
+            color: #8b949e;
+            font-weight: 500;
+        }
+
+        .expanded-status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .expanded-status-excellent {
+            background: #238636;
+            color: white;
+        }
+
+        .expanded-status-good {
+            background: #1f6feb;
+            color: white;
+        }
+
+        .expanded-status-average {
+            background: #f39c12;
+            color: white;
+        }
+
+        .expanded-status-poor {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .expanded-analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .expanded-analytic-card {
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .expanded-analytic-card:hover {
+            border-color: #1f6feb;
+            background: #1c2128;
+            transform: translateY(-2px);
+        }
+
+        .expanded-analytic-title {
+            font-size: 12px;
+            color: #8b949e;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .expanded-analytic-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #f0f6fc;
+            font-family: 'Courier New', monospace;
+        }
+
+        .expanded-analytic-unit {
+            font-size: 14px;
+            color: #8b949e;
+            margin-left: 4px;
+        }
+
+        .expanded-chart-container {
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .expanded-chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f0f6fc;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .expanded-mini-chart {
+            height: 120px;
+            background: #0d1117;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .expanded-chart-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #1f6feb, #238636);
+            animation: chartAnimation 2s ease-in-out infinite;
+        }
+
+        .expanded-chart-bars {
+            display: flex;
+            align-items: end;
+            height: 100%;
+            gap: 2px;
+            padding: 10px;
+        }
+
+        .expanded-chart-bar {
+            flex: 1;
+            background: #1f6feb;
+            border-radius: 2px 2px 0 0;
+            min-height: 10px;
+            animation: barAnimation 1.5s ease-in-out infinite alternate;
+        }
+
+        .expanded-chart-bar:nth-child(even) {
+            background: #238636;
+            animation-delay: 0.3s;
+        }
+
+        .expanded-chart-bar:nth-child(3n) {
+            background: #f39c12;
+            animation-delay: 0.6s;
+        }
+
+        .expanded-recommendations {
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .expanded-recommendations-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f0f6fc;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .recommendation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: #0d1117;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+        }
+
+        .recommendation-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .recommendation-icon.optimize {
+            background: #238636;
+            color: white;
+        }
+
+        .recommendation-icon.warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .recommendation-icon.info {
+            background: #1f6feb;
+            color: white;
+        }
+
+        .recommendation-text {
+            color: #f0f6fc;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        /* Animations */
+        @keyframes chartAnimation {
+
+            0%,
+            100% {
+                transform: scaleX(1);
+            }
+
+            50% {
+                transform: scaleX(1.1);
+            }
+        }
+
+        @keyframes barAnimation {
+            0% {
+                height: 20%;
+            }
+
+            100% {
+                height: 90%;
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .app-container {
+                grid-template-columns: 240px 1fr 280px;
+            }
+
+            .performance-modal {
+                width: 400px;
+            }
+
+            .performance-expanded-content {
+                max-width: 700px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar-left,
+            .sidebar-right {
+                display: none;
+            }
+
+            .performance-modal {
+                width: 100vw;
+            }
+
+            .performance-expanded-content {
+                width: 95vw;
+                max-height: 90vh;
+            }
+
+            .expanded-analytics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Left Sidebar - Chat History -->
+        <div class="sidebar-left">
+            <div class="sidebar-header">
+                <div class="sidebar-title">Chat History</div>
+                <button class="new-chat-btn" onclick="startNewChat()">
+                    + New Chat
+                </button>
+            </div>
+            <div class="chat-history" id="chatHistory">
+                <div class="chat-item active" onclick="loadChat('current')">
+                    <div class="chat-item-title">Current Session</div>
+                    <div class="chat-item-time">Active now</div>
+                </div>
+                <div class="chat-item" onclick="loadChat('1')">
+                    <div class="chat-item-title">Python Code Review</div>
+                    <div class="chat-item-time">2 hours ago</div>
+                </div>
+                <div class="chat-item" onclick="loadChat('2')">
+                    <div class="chat-item-title">Data Analysis Discussion</div>
+                    <div class="chat-item-time">Yesterday</div>
+                </div>
+                <div class="chat-item" onclick="loadChat('3')">
+                    <div class="chat-item-title">Creative Writing Session</div>
+                    <div class="chat-item-time">2 days ago</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center Panel - Main Chat -->
+        <div class="main-chat">
+            <div class="chat-header">
+                <div class="chat-title">Enhanced AI Assistant</div>
+                <div class="model-info">
+                    <div class="status-indicator status-online">● Online</div>
+                    <select class="model-selector" id="modelSelector">
+                        <option value="nexus">Nexus AI</option>
+                        <option value="gpt-4">GPT-4</option>
+                        <option value="claude">Claude</option>
+                        <option value="gemini">Gemini Pro</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message">
+                    <div class="message-avatar ai">AI</div>
+                    <div class="message-content">
+                        <div class="message-text">
+                            Welcome to the Advanced AI Interface! I have access to 124 specialized tools and modules to
+                            help you with any task.
+
+                            I can assist with:
+                            • Code generation and analysis
+                            • Data processing and analysis
+                            • Creative writing and brainstorming
+                            • Research and documentation
+                            • Technical problem solving
+                            • And much more!
+
+                            What would you like to work on today?
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <textarea class="chat-input" id="chatInput"
+                        placeholder="Ask me anything or describe what you'd like to work on..." rows="1"
+                        onkeydown="handleInputKeydown(event)"></textarea>
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="input-tools">
+                    <button class="input-tool-btn" onclick="insertTemplate('code')">📝 Code</button>
+                    <button class="input-tool-btn" onclick="insertTemplate('analysis')">📊 Analysis</button>
+                    <button class="input-tool-btn" onclick="insertTemplate('creative')">🎨 Creative</button>
+                    <button class="input-tool-btn" onclick="insertTemplate('research')">🔍 Research</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar - Tools & Modules -->
+        <div class="sidebar-right">
+            <div class="tools-header">
+                <div class="tools-title">AI Tools</div>
+                <div class="tools-count" id="toolsCount">124</div>
+            </div>
+            <div class="tools-search">
+                <input type="text" class="search-input" placeholder="Search tools..." id="toolsSearch"
+                    oninput="filterTools()">
+            </div>
+            <div class="tools-categories" id="toolsCategories">
+                <!-- Tools will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Stats Panel (Bottom Right) -->
+    <div class="performance-panel" id="performancePanel">
+        <div class="performance-trigger" onclick="togglePerformancePanel()">
+            <div class="performance-icon">📊</div>
+            <div class="performance-badge" id="performanceBadge">124</div>
+        </div>
+
+        <div class="performance-modal" id="performanceModal">
+            <div class="performance-header">
+                <h3>🧠 AI Performance Analytics</h3>
+                <button class="close-btn" onclick="togglePerformancePanel()">×</button>
+            </div>
+
+            <div class="performance-content">
+                <!-- Overview Section -->
+                <div class="overview-section">
+                    <h4>📈 Current Performance Overview</h4>
+                    <div class="overview-grid">
+                        <div class="overview-card">
+                            <div class="overview-value" id="overallScore">98.7%</div>
+                            <div class="overview-label">AI Performance Score</div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="overview-value" id="processingSpeed">3.2ms</div>
+                            <div class="overview-label">Avg Response Time</div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="overview-value" id="accuracyRate">99.1%</div>
+                            <div class="overview-label">Accuracy Rate</div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="overview-value" id="activeTools">124</div>
+                            <div class="overview-label">Tools Available</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mathematical Calculations -->
+                <div class="math-section">
+                    <h4>🧮 Real-time Mathematical Processing</h4>
+                    <div class="math-display">
+                        <div class="formula">
+                            <strong>AI Formula:</strong> y = w × x + b
+                        </div>
+                        <div class="math-variables">
+                            <div class="variable">
+                                <span class="var-label">w:</span>
+                                <span class="var-value" id="wValue">0.8472</span>
+                            </div>
+                            <div class="variable">
+                                <span class="var-label">x:</span>
+                                <span class="var-value" id="xValue">0.6234</span>
+                            </div>
+                            <div class="variable">
+                                <span class="var-label">b:</span>
+                                <span class="var-value" id="bValue">0.1928</span>
+                            </div>
+                            <div class="variable">
+                                <span class="var-label">y:</span>
+                                <span class="var-value" id="yValue">0.7251</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Button -->
+                <div class="sample-section">
+                    <button class="sample-btn" onclick="samplePerformance()">
+                        🔬 Take Performance Sample
+                    </button>
+                    <div class="sample-result" id="sampleResult"></div>
+                </div>
+
+                <!-- 500 Performance Boxes -->
+                <div class="boxes-section">
+                    <h4>📊 500 Real-time Performance Metrics</h4>
+                    <div class="performance-grid" id="performanceGrid">
+                        <!-- 500 boxes will be generated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Magnified Performance Boxes -->
+                <div class="magnified-section">
+                    <h4>🔍 Magnified Performance View</h4>
+                    <div class="magnified-controls">
+                        <button class="view-toggle-btn" onclick="toggleMagnifiedView()" id="viewToggleBtn">
+                            📋 Show List View
+                        </button>
+                        <div class="magnified-info">
+                            <span>Showing individual performance metrics for detailed analysis</span>
+                        </div>
+                    </div>
+                    <div class="magnified-grid" id="magnifiedGrid">
+                        <!-- 500 magnified squares will be generated by JavaScript -->
+                    </div>
+                    <div class="magnified-list" id="magnifiedList" style="display: none;">
+                        <!-- Performance metrics list will be generated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="loading-indicator" id="loadingIndicator">
+        <div class="loading-spinner"></div>
+        <div>Processing with AI...</div>
+    </div>
+
+    <!-- Expanded Performance Modal -->
+    <div class="performance-expanded-modal" id="performanceExpandedModal">
+        <div class="performance-expanded-content">
+            <div class="expanded-header">
+                <div class="expanded-title">
+                    <div class="expanded-metric-icon" id="expandedMetricIcon">📊</div>
+                    <div class="expanded-metric-info">
+                        <h3 id="expandedMetricName">Performance Metric</h3>
+                        <div class="expanded-metric-subtitle" id="expandedMetricSubtitle">Detailed analytics and
+                            insights</div>
+                    </div>
+                </div>
+                <button class="expanded-close-btn" onclick="closeExpandedPerformance()">×</button>
+            </div>
+            <div class="expanded-body">
+                <div class="expanded-metric-value">
+                    <div class="expanded-value-display" id="expandedValueDisplay">0.00%</div>
+                    <div class="expanded-value-label" id="expandedValueLabel">Current Value</div>
+                    <div class="expanded-status-badge" id="expandedStatusBadge">Excellent</div>
+                </div>
+
+                <div class="expanded-analytics-grid" id="expandedAnalyticsGrid">
+                    <!-- Analytics cards will be populated by JavaScript -->
+                </div>
+
+                <div class="expanded-chart-container">
+                    <div class="expanded-chart-title">📈 Real-time Performance Trend</div>
+                    <div class="expanded-mini-chart" id="expandedMiniChart">
+                        <div class="expanded-chart-bars" id="expandedChartBars">
+                            <!-- Chart bars will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expanded-recommendations">
+                    <div class="expanded-recommendations-title">
+                        💡 AI-Powered Recommendations
+                    </div>
+                    <div id="expandedRecommendations">
+                        <!-- Recommendations will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="advanced_interface.js"></script>
+</body>
+
+</html>
