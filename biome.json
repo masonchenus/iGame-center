@@ -37,12 +37,12 @@
                 "noExcessiveCognitiveComplexity": {
                     "level": "off",
                     "options": {
-                        "maxAllowedComplexity": 25
+                        "maxAllowedComplexity": 125
                     }
                 },
                 "useLiteralKeys": "off",
                 "useArrowFunction": "off",
-                "useFlatMap": "off"
+                "useFlatMap": "info"
             },
             "suspicious": {
                 "noArrayIndexKey": "off",
@@ -68,6 +68,11 @@
     "javascript": {
         "parser": {
             "unsafeParameterDecoratorsEnabled": true
+        }
+    },
+    "markdown": {
+        "linter": {
+            "enabled": true
         }
     }
 }

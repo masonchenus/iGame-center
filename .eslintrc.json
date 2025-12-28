@@ -35,13 +35,13 @@
     "array-bracket-spacing": ["error", "never"],
     "keyword-spacing": "error",
     "comma-spacing": "warn",
-    "no-trailing-spaces": "error",
+    "no-trailing-spaces": "warn",
     "eol-last": ["error", "always"],
-    "max-len": ["warn", { "code": 100, "ignoreUrls": true }],
+    "max-len": ["warn", { "code": 100, "ignoreUrls": false }],
     "no-var": "error",
     "eqeqeq": ["error", "always"],
     "curly": ["error", "all"],
-    "brace-style": ["error", "1tbs", { "allowSingleLine": false }]
+    "brace-style": ["error", "1tbs", { "allowSingleLine": true }]
   }
 }
 // eslint-disable-next-line eol-last
