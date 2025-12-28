@@ -1,3 +1,6 @@
+import hashlib
+import re
+
 
 class BaseFlash:
     def __init__(self, tier: str = "flash"):
@@ -67,12 +70,23 @@ class UltraFlashModel(BaseFlash):
         """Ultra Flash uses optimized tokenization for speed."""
         # Ultra Flash: minimal tokenization for speed
         return text.split()
+
+
+class BaseFlashCoder:
+    def __init__(self, tier: str, language: str):
+        self.tier = tier
+        self.language = language
+        self.name = f"{tier}-{language}"
+
+    def code(self, code_block: str) -> str:
+        raise NotImplementedError("Subclasses must implement the code method")
+
+
 class FlashCoder(BaseFlashCoder):
     def __init__(self):
         super().__init__("flash", "python")
 
     def code(self, code_block: str) -> str:
-        
         return code_block
 
 

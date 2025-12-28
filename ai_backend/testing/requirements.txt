@@ -1,0 +1,8 @@
+# Test requirements for ai_bakend tests
+# Run: pip install -r requirements.txt
+
+# Main dependency from parent requirements
+python-pptx
+
+# Testing framework (built-in, but listed for documentation)
+# unittest is part of Python standard library

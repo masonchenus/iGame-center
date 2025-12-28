@@ -55,10 +55,6 @@ Thumbs.db
 
 # Build artifacts
 *.o
-*.a
-*.so
-*.egg-info/
-dist-info/
 
 # Editor backup files
 *~
@@ -77,3 +73,4 @@ temp/
 server.log
 __pycache__/
 Docker/
+*00Tree.html
