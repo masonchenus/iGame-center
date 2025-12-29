@@ -1,4 +1,4 @@
-FIXME: Try to split this file (if you can) into javascript & css!
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12839,7 +12839,7 @@ FIXME: Try to split this file (if you can) into javascript & css!
                     name: 'Plasma',
                     color: '#06ffa5',
                     fireRate: 125,
-                    damage: 3254045,
+                    damage: 325405,
                     bulletSpeed: 6,
                     bulletSize: { w: 8, h: 12 },
                     spread: 0,
@@ -12849,7 +12849,7 @@ FIXME: Try to split this file (if you can) into javascript & css!
                 missile: {
                     name: 'Missile',
                     color: '#ffd60a',
-                    fireRate: 200,
+                    fireRate: 10,
                     damage: 1000000,
                     bulletSpeed: 4,
                     bulletSize: { w: 6, h: 14 },
@@ -13013,7 +13013,7 @@ FIXME: Try to split this file (if you can) into javascript & css!
                     randomBlindDuration: () => Math.random() * 2000 + 500,
                     randomAbsoluteZero: () => Math.random() > 0.9,
                     randomFrostIntensity: () => Math.random() * 1.5 + 0.5,
-                    randomCosmicRay: () => Math.random() > 1,
+                    randomCosmicRay: () => Math.random() > 5,
                     randomCosmicDamage: () => Math.random() * 80000 + 50,
                     randomWormhole: () => Math.random() > 0.99,
                     randomWormholeStability: () => Math.random() * 0.5 + 0.2,
@@ -14049,9 +14049,9 @@ FIXME: Try to split this file (if you can) into javascript & css!
                                 width: currentWep.bulletSize.w,
                                 height: currentWep.bulletSize.h,
                                 target: nearestEnemy,
-                                damage: currentWep.damage * damageMultiplier ** 5,
+                                damage: currentWep.damage ** damageMultiplier + 100,
                                 type: 'plasma',
-                                speed: currentWep.bulletSpeed,
+                                speed: currentWep.bulletSpeed * player.speed,
                                 tracking: true
                             });
                         } else if (currentWeapon === 'missile') {
@@ -14065,7 +14065,7 @@ FIXME: Try to split this file (if you can) into javascript & css!
                                 damage: currentWep.damage * damageMultiplier,
                                 type: 'missile',
                                 explosive: true,
-                                explosionRadius: 90 * damageMultiplier,
+                                explosionRadius: 1440 * damageMultiplier,
                                 exploded: false,
                                 tracking: true
                             });
@@ -14258,7 +14258,7 @@ FIXME: Try to split this file (if you can) into javascript & css!
                                     height: currentWep.bulletSize.h,
                                     vx: Math.cos(angle) * currentWep.bulletSpeed,
                                     vy: Math.sin(angle) * currentWep.bulletSpeed,
-                                    damage: 200000,
+                                    damage: 2000000,
                                     type: 'nova',
                                     explosive: true,
                                     explosionRadius: 200000000,
@@ -14788,7 +14788,7 @@ FIXME: Try to split this file (if you can) into javascript & css!
                         if (exp.active && exp.life > 0.7) {
                             enemies.forEach(e => {
                                 if (checkCircleDistance(exp.x, exp.y, e.x + e.width / 2, e.y + e.height / 2, exp.radius)) {
-                                    e.health -= exp.damage * 0.3;
+                                    e.health -= exp.damage * 0.5;
                                 }
                             });
                             if (boss && checkCircleDistance(exp.x, exp.y, boss.x + boss.width / 2, boss.y + boss.height / 2, exp.radius)) {
