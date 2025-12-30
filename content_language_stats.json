@@ -1,0 +1,157 @@
+{
+  "languages": {
+    "JavaScript": {
+      "bytes": 111180347,
+      "percentage": 29.83
+    },
+    "Python": {
+      "bytes": 32643542,
+      "percentage": 8.76
+    },
+    "TypeScript": {
+      "bytes": 18250336,
+      "percentage": 4.9
+    },
+    "Markdown": {
+      "bytes": 9690942,
+      "percentage": 2.6
+    },
+    "C": {
+      "bytes": 5968136,
+      "percentage": 1.6
+    },
+    "HTML": {
+      "bytes": 3401711,
+      "percentage": 0.91
+    },
+    "CSS": {
+      "bytes": 2422939,
+      "percentage": 0.65
+    },
+    "GraphQL": {
+      "bytes": 728033,
+      "percentage": 0.2
+    },
+    "Rust": {
+      "bytes": 522762,
+      "percentage": 0.14
+    },
+    "Elixir": {
+      "bytes": 311840,
+      "percentage": 0.08
+    },
+    "Go": {
+      "bytes": 264480,
+      "percentage": 0.07
+    },
+    "D": {
+      "bytes": 209294,
+      "percentage": 0.06
+    },
+    "Haskell": {
+      "bytes": 155765,
+      "percentage": 0.04
+    },
+    "Ruby": {
+      "bytes": 154287,
+      "percentage": 0.04
+    },
+    "Crystal": {
+      "bytes": 136325,
+      "percentage": 0.04
+    },
+    "C++": {
+      "bytes": 134151,
+      "percentage": 0.04
+    },
+    "Shell": {
+      "bytes": 50999,
+      "percentage": 0.01
+    },
+    "WebAssembly": {
+      "bytes": 48526,
+      "percentage": 0.01
+    },
+    "Perl": {
+      "bytes": 41904,
+      "percentage": 0.01
+    },
+    "Fortran": {
+      "bytes": 40333,
+      "percentage": 0.01
+    },
+    "reStructuredText": {
+      "bytes": 37079,
+      "percentage": 0.01
+    },
+    "PHP": {
+      "bytes": 36848,
+      "percentage": 0.01
+    },
+    "TeX": {
+      "bytes": 16746,
+      "percentage": 0.0
+    },
+    "PowerShell": {
+      "bytes": 15148,
+      "percentage": 0.0
+    },
+    "C#": {
+      "bytes": 11420,
+      "percentage": 0.0
+    },
+    "SQL": {
+      "bytes": 11140,
+      "percentage": 0.0
+    },
+    "BNF": {
+      "bytes": 4952,
+      "percentage": 0.0
+    },
+    "TOML": {
+      "bytes": 2850,
+      "percentage": 0.0
+    },
+    "CoffeeScript": {
+      "bytes": 2713,
+      "percentage": 0.0
+    },
+    "Nix": {
+      "bytes": 459,
+      "percentage": 0.0
+    }
+  },
+  "file_counts": {
+    "Markdown": 1575,
+    "HTML": 43,
+    "TOML": 3,
+    "Shell": 38,
+    "Python": 2611,
+    "JavaScript": 15356,
+    "TypeScript": 3248,
+    "Nix": 1,
+    "CoffeeScript": 8,
+    "BNF": 8,
+    "CSS": 790,
+    "PHP": 3,
+    "PowerShell": 8,
+    "Perl": 1,
+    "WebAssembly": 1,
+    "Go": 15,
+    "Rust": 20,
+    "C": 60,
+    "C++": 12,
+    "C#": 1,
+    "D": 13,
+    "SQL": 1,
+    "reStructuredText": 8,
+    "Fortran": 86,
+    "Ruby": 15,
+    "TeX": 10,
+    "Elixir": 15,
+    "Crystal": 15,
+    "Haskell": 15,
+    "GraphQL": 3
+  },
+  "generated_from": "content-language-stats.py"
+}

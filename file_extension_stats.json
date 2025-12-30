@@ -1,0 +1,612 @@
+{
+  ".js": {
+    "count": 14682,
+    "percentage": 37.13,
+    "raw_percentage": 37.12920112282831
+  },
+  "(no extension)": {
+    "count": 9596,
+    "percentage": 24.27,
+    "raw_percentage": 24.267253369749387
+  },
+  ".ts": {
+    "count": 2799,
+    "percentage": 7.08,
+    "raw_percentage": 7.078370381609893
+  },
+  ".py": {
+    "count": 2325,
+    "percentage": 5.88,
+    "raw_percentage": 5.879675290190425
+  },
+  ".pyc": {
+    "count": 2261,
+    "percentage": 5.72,
+    "raw_percentage": 5.717826163922819
+  },
+  ".md": {
+    "count": 1559,
+    "percentage": 3.94,
+    "raw_percentage": 3.9425435601749994
+  },
+  ".json": {
+    "count": 1553,
+    "percentage": 3.93,
+    "raw_percentage": 3.9273702045874113
+  },
+  ".map": {
+    "count": 1349,
+    "percentage": 3.41,
+    "raw_percentage": 3.411476114609412
+  },
+  ".css": {
+    "count": 531,
+    "percentage": 1.34,
+    "raw_percentage": 1.3428419695015552
+  },
+  ".mjs": {
+    "count": 477,
+    "percentage": 1.21,
+    "raw_percentage": 1.2062817692132615
+  },
+  ".mts": {
+    "count": 315,
+    "percentage": 0.8,
+    "raw_percentage": 0.7966011683483802
+  },
+  ".pyi": {
+    "count": 274,
+    "percentage": 0.69,
+    "raw_percentage": 0.6929165718331942
+  },
+  ".scss": {
+    "count": 259,
+    "percentage": 0.65,
+    "raw_percentage": 0.6549831828642237
+  },
+  ".yml": {
+    "count": 244,
+    "percentage": 0.62,
+    "raw_percentage": 0.6170497938952533
+  },
+  ".cjs": {
+    "count": 151,
+    "percentage": 0.38,
+    "raw_percentage": 0.38186278228763626
+  },
+  ".txt": {
+    "count": 147,
+    "percentage": 0.37,
+    "raw_percentage": 0.37174721189591076
+  },
+  ".cts": {
+    "count": 134,
+    "percentage": 0.34,
+    "raw_percentage": 0.33887160812280304
+  },
+  ".f90": {
+    "count": 61,
+    "percentage": 0.15,
+    "raw_percentage": 0.15426244847381332
+  },
+  ".typed": {
+    "count": 44,
+    "percentage": 0.11,
+    "raw_percentage": 0.1112712743089801
+  },
+  ".html": {
+    "count": 43,
+    "percentage": 0.11,
+    "raw_percentage": 0.10874238171104872
+  },
+  ".so": {
+    "count": 38,
+    "percentage": 0.1,
+    "raw_percentage": 0.0960979187213919
+  },
+  ".sh": {
+    "count": 35,
+    "percentage": 0.09,
+    "raw_percentage": 0.08851124092759781
+  },
+  ".h": {
+    "count": 35,
+    "percentage": 0.09,
+    "raw_percentage": 0.08851124092759781
+  },
+  ".csv": {
+    "count": 30,
+    "percentage": 0.08,
+    "raw_percentage": 0.07586677793794097
+  },
+  ".sample": {
+    "count": 28,
+    "percentage": 0.07,
+    "raw_percentage": 0.07080899274207823
+  },
+  ".jst": {
+    "count": 25,
+    "percentage": 0.06,
+    "raw_percentage": 0.06322231494828415
+  },
+  ".c": {
+    "count": 25,
+    "percentage": 0.06,
+    "raw_percentage": 0.06322231494828415
+  },
+  ".f": {
+    "count": 24,
+    "percentage": 0.06,
+    "raw_percentage": 0.06069342235035278
+  },
+  ".ttf": {
+    "count": 23,
+    "percentage": 0.06,
+    "raw_percentage": 0.058164529752421416
+  },
+  ".woff2": {
+    "count": 20,
+    "percentage": 0.05,
+    "raw_percentage": 0.05057785195862731
+  },
+  ".woff": {
+    "count": 20,
+    "percentage": 0.05,
+    "raw_percentage": 0.05057785195862731
+  },
+  ".rs": {
+    "count": 20,
+    "percentage": 0.05,
+    "raw_percentage": 0.05057785195862731
+  },
+  ".png": {
+    "count": 19,
+    "percentage": 0.05,
+    "raw_percentage": 0.04804895936069595
+  },
+  ".dylib": {
+    "count": 18,
+    "percentage": 0.05,
+    "raw_percentage": 0.045520066762764586
+  },
+  ".bsd": {
+    "count": 16,
+    "percentage": 0.04,
+    "raw_percentage": 0.040462281566901855
+  },
+  ".pem": {
+    "count": 16,
+    "percentage": 0.04,
+    "raw_percentage": 0.040462281566901855
+  },
+  ".go": {
+    "count": 15,
+    "percentage": 0.04,
+    "raw_percentage": 0.037933388968970486
+  },
+  ".rb": {
+    "count": 15,
+    "percentage": 0.04,
+    "raw_percentage": 0.037933388968970486
+  },
+  ".ex": {
+    "count": 15,
+    "percentage": 0.04,
+    "raw_percentage": 0.037933388968970486
+  },
+  ".cr": {
+    "count": 15,
+    "percentage": 0.04,
+    "raw_percentage": 0.037933388968970486
+  },
+  ".hs": {
+    "count": 15,
+    "percentage": 0.04,
+    "raw_percentage": 0.037933388968970486
+  },
+  ".markdown": {
+    "count": 14,
+    "percentage": 0.04,
+    "raw_percentage": 0.03540449637103912
+  },
+  ".d": {
+    "count": 13,
+    "percentage": 0.03,
+    "raw_percentage": 0.032875603773107755
+  },
+  ".jsm": {
+    "count": 12,
+    "percentage": 0.03,
+    "raw_percentage": 0.03034671117517639
+  },
+  ".cpp": {
+    "count": 12,
+    "percentage": 0.03,
+    "raw_percentage": 0.03034671117517639
+  },
+  ".pdf": {
+    "count": 10,
+    "percentage": 0.03,
+    "raw_percentage": 0.025288925979313655
+  },
+  ".tex": {
+    "count": 10,
+    "percentage": 0.03,
+    "raw_percentage": 0.025288925979313655
+  },
+  ".log": {
+    "count": 9,
+    "percentage": 0.023,
+    "raw_percentage": 0.022760033381382293
+  },
+  ".jsx": {
+    "count": 9,
+    "percentage": 0.023,
+    "raw_percentage": 0.022760033381382293
+  },
+  ".coffee": {
+    "count": 8,
+    "percentage": 0.02,
+    "raw_percentage": 0.020231140783450927
+  },
+  ".bnf": {
+    "count": 8,
+    "percentage": 0.02,
+    "raw_percentage": 0.020231140783450927
+  },
+  ".ps1": {
+    "count": 8,
+    "percentage": 0.02,
+    "raw_percentage": 0.020231140783450927
+  },
+  ".rst": {
+    "count": 8,
+    "percentage": 0.02,
+    "raw_percentage": 0.020231140783450927
+  },
+  ".svg": {
+    "count": 7,
+    "percentage": 0.018,
+    "raw_percentage": 0.01770224818551956
+  },
+  ".xml": {
+    "count": 7,
+    "percentage": 0.018,
+    "raw_percentage": 0.01770224818551956
+  },
+  ".pxd": {
+    "count": 7,
+    "percentage": 0.018,
+    "raw_percentage": 0.01770224818551956
+  },
+  ".pyf": {
+    "count": 7,
+    "percentage": 0.018,
+    "raw_percentage": 0.01770224818551956
+  },
+  ".patch": {
+    "count": 6,
+    "percentage": 0.015,
+    "raw_percentage": 0.015173355587588195
+  },
+  ".exe": {
+    "count": 6,
+    "percentage": 0.015,
+    "raw_percentage": 0.015173355587588195
+  },
+  ".def": {
+    "count": 5,
+    "percentage": 0.013,
+    "raw_percentage": 0.012644462989656827
+  },
+  ".npy": {
+    "count": 5,
+    "percentage": 0.013,
+    "raw_percentage": 0.012644462989656827
+  },
+  ".flow": {
+    "count": 4,
+    "percentage": 0.01,
+    "raw_percentage": 0.010115570391725464
+  },
+  ".pyx": {
+    "count": 4,
+    "percentage": 0.01,
+    "raw_percentage": 0.010115570391725464
+  },
+  ".toml": {
+    "count": 3,
+    "percentage": 0.008,
+    "raw_percentage": 0.007586677793794097
+  },
+  ".1": {
+    "count": 3,
+    "percentage": 0.008,
+    "raw_percentage": 0.007586677793794097
+  },
+  ".lock": {
+    "count": 3,
+    "percentage": 0.008,
+    "raw_percentage": 0.007586677793794097
+  },
+  ".ico": {
+    "count": 3,
+    "percentage": 0.008,
+    "raw_percentage": 0.007586677793794097
+  },
+  ".php": {
+    "count": 3,
+    "percentage": 0.008,
+    "raw_percentage": 0.007586677793794097
+  },
+  ".closure-compiler": {
+    "count": 3,
+    "percentage": 0.008,
+    "raw_percentage": 0.007586677793794097
+  },
+  ".esprima": {
+    "count": 3,
+    "percentage": 0.008,
+    "raw_percentage": 0.007586677793794097
+  },
+  ".node": {
+    "count": 3,
+    "percentage": 0.008,
+    "raw_percentage": 0.007586677793794097
+  },
+  ".cfg": {
+    "count": 3,
+    "percentage": 0.008,
+    "raw_percentage": 0.007586677793794097
+  },
+  ".build": {
+    "count": 3,
+    "percentage": 0.008,
+    "raw_percentage": 0.007586677793794097
+  },
+  ".ini": {
+    "count": 3,
+    "percentage": 0.008,
+    "raw_percentage": 0.007586677793794097
+  },
+  ".gz": {
+    "count": 3,
+    "percentage": 0.008,
+    "raw_percentage": 0.007586677793794097
+  },
+  ".graphql": {
+    "count": 3,
+    "percentage": 0.008,
+    "raw_percentage": 0.007586677793794097
+  },
+  ".mdown": {
+    "count": 2,
+    "percentage": 0.005,
+    "raw_percentage": 0.005057785195862732
+  },
+  ".source-map": {
+    "count": 2,
+    "percentage": 0.005,
+    "raw_percentage": 0.005057785195862732
+  },
+  ".zip": {
+    "count": 2,
+    "percentage": 0.005,
+    "raw_percentage": 0.005057785195862732
+  },
+  ".yaml": {
+    "count": 2,
+    "percentage": 0.005,
+    "raw_percentage": 0.005057785195862732
+  },
+  ".14": {
+    "count": 2,
+    "percentage": 0.005,
+    "raw_percentage": 0.005057785195862732
+  },
+  ".apache": {
+    "count": 2,
+    "percentage": 0.005,
+    "raw_percentage": 0.005057785195862732
+  },
+  ".a": {
+    "count": 2,
+    "percentage": 0.005,
+    "raw_percentage": 0.005057785195862732
+  },
+  ".npz": {
+    "count": 2,
+    "percentage": 0.005,
+    "raw_percentage": 0.005057785195862732
+  },
+  ".jsonc": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".nix": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".webmanifest": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".snap": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".styl": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".iml": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".pl": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".mf": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".ttx": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".otf": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".jpg": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".tar": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".wasm": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".apache2": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".mit": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".bash": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  "._js_": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".drawio": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".i": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".cs": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".sql": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".fish": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".csh": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".sha256sum": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".fits": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".pkl": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".pc": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".template": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".f95": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".inc": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".icc": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".license": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".external": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".swo": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".swp": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".rev": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".idx": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  },
+  ".pack": {
+    "count": 1,
+    "percentage": 0.0025,
+    "raw_percentage": 0.002528892597931366
+  }
+}
